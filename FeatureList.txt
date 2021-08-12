@@ -1,0 +1,62 @@
+Project app that allows customers to book carpet cleaning service online. 
+It allows them to build their own quote, books a date and submit an order.
+This app is has a carpet cleaning service company that will be using it with facbook ads to convert leads to booked customers.
+
+Feature List:
+/new quote page
+- main index page is the instant book page where the customer can add services from an accordian style menu.
+- clicking on a service will add it to the table
+- in the table the customer can select the quantity, choose a package (basic, plu, or pro)
+- priceing adjusts accordingly in the real time quote below
+- customer will be required to register/login beyond the quote page (this will allow the business to have their contact info for followup if needed)
+
+/login and registation
+- all pages below require the customer to be logged in and in session
+- validate registation info
+- logging in or registering takes the user back the quote page with it prepulated from the info they entered before
+
+/Saving quotes
+- customer can save a quote, this is done by clicking 'save quote' on the new quote page and takes them to a save page which requires them to name their quote
+- clicking cancel on savequote page will go back to new quote page
+- clikcing save will go to savedquote page and list all the saved quotes in a table, with name , last updated, zipcode, edit button, delete button
+- delete button deletes quote
+- edit button takes customer back to new quote page and prepulates the order
+
+/Scheduling service
+- clicking on 'schedule now' on the new quote page will take customer to login/reg page if not in session or to schedule page if in session
+- schedule page shows a calendar and quote summary with prices
+- when customer clicks on an available date on the calendar the available times popup on the right for that date.
+- when cusotmer selects a time as well then they will be allows to click 'continue'
+- clikcing continue on the schedule page takes them to the address page
+
+/adding service address
+- customer will see a preopulated address from their registation from
+- they can select this address or enter a different one (optional features allow them to save multiple addresses on one account)
+- clicking on 'use this address' will direct to 'slected billing address' page
+
+/billing address page
+- billing address page has checkbox to use the service address as billing address (preselected) 
+- if the checkbox is unselected it allows to enter a different billing address
+- clicking 'continue' directs to order summary page
+
+/order summary page
+- this page depicts the date/time of booked service with edit date button below
+- edit date button takes to scheduling page
+- also depicts the billing and service address with edit address button below
+- edit dataddress e button takes to service address page
+- also depicts the order and price summary with edit order button below
+- edit button takes directs to the new quote page and prepopulates the quote
+- submit order button marks the order as booked. (if payment is entered, optional, then it generates a reciept), the company can then approce the order and followup
+
+
+
+
+
+Product Backlog (Optional):
+-google reviews on the quote page (as a sales tool)
+- check zipcode for service address if it is servicable by the business
+- allow cusomter to save and manage multiple service addresses on the same account
+- allow customer to manage their serivce addresses
+- allow cusomter to save and manage multiple billing addresses and corresponding CC info on the same account
+- all ccustomer to enter CC info and accept payment through stripe
+
