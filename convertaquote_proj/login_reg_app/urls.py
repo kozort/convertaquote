@@ -2,11 +2,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # login and dashboard
-    path('', views.index),
-    path('register', views.register),
-    path('login', views.login),
-    path('logout', views.logout),
+    path('', views.login),
+    path('login', views.login, name="login"),
+    path('register', views.register, name="register"),
+    path('registering', views.registering, name="registering"),
+    path('logining', views.logining, name="logining"),
+    path('logout', views.logout,  name="logout"),
     # validations for registration page
-    path('reg_validate/<int:code>', views.register_validations)
+    path('reg_validate/<int:code>', views.register_validations,  name="reg_validate")
 ]

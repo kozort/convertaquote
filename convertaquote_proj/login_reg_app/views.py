@@ -4,26 +4,36 @@ from django.contrib import messages
 from datetime import datetime
 import bcrypt
 
-def index(request):
+# Login page
+def login(request):
     # if a user is logged in prevent relogin from a different user because we do not want to overwrite the session data. User needs to log out first then they can go to login.html to login/register
     try: 
         if request.session['userid']:
             context = {"User": USER.objects.get(id=request.session['userid'])}
-            return redirect('/wishes')
+            return redirect('/quote/myaccount')
     except:
-        return render(request, 'index.html')
+        return render(request, 'login.html')
 
+# Register page
+def register(request):
+    # if a user is logged in prevent relogin from a different user because we do not want to overwrite the session data. User needs to log out first then they can go to login.html to login/register
+    try: 
+        if request.session['userid']:
+            context = {"User": USER.objects.get(id=request.session['userid'])}
+            return redirect('/quote/myaccount')
+    except:
+        return render(request, 'register.html')
 #--------------------------------------------------------
 # LOGIN/REGISTRATION
 #--------------------------------------------------------
 # POST
-def register(request):
+def registering(request):
     if request.method == 'POST':
         errors = USER.objects.register_validator(request.POST)
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value, extra_tags='register')
-            return redirect('/')
+            return redirect('/register')
         else:
             USER.objects.create(
                 first_name = request.POST['first_name'],
@@ -32,31 +42,31 @@ def register(request):
                 password = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()).decode()
             )
             request.session['userid'] = USER.objects.last().id
-            return redirect('/wishes')
-    return redirect('/')
+            return redirect('/quote')
+    return redirect('/register')
 
 # POST
-def login(request):
+def logining(request):
     if request.method == 'POST':
         user = USER.objects.filter(email=request.POST['email'].lower()) #find user with email not case sensative
         if user:
             logged_user = user[0]
             if bcrypt.checkpw(request.POST['password'].encode(), logged_user.password.encode()):
                 request.session['userid'] = logged_user.id
-                return redirect('/wishes')
+                return redirect('/quote')
         else:
             messages.error(request, "Invalid credentials.", extra_tags='login')
-            return redirect('/')
-    return redirect('/')
+            return redirect('/login')
+    return redirect('/login')
 
 # POST
 def logout(request):
     if request.method == 'POST':
         request.session.flush()
-    return redirect('/')
+    return redirect('/login')
 
 #--------------------------------------------------------
-# Main
+# Main this should be in other app
 #--------------------------------------------------------
 def main(request):
         try: #check if user is logged in
@@ -67,9 +77,9 @@ def main(request):
                 # "myWISHES": WISH.objects.filter(created_by = user).exclude(granted = True),
                 # "grantedWISHES": WISH.objects.filter(granted = True)
                 }
-            return render(request, 'wishes.html', context)
+            return render(request, 'quote.html', context)
         except:
-            return redirect('/')
+            return redirect('/quote')
     
 
 
@@ -113,4 +123,4 @@ def register_validations(request, code):
             'error': error
         }
         return render(request, 'partials/reg_validate.html', context)  
-    return redirect('/')
+    return redirect('/register')
