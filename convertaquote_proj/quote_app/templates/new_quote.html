@@ -5,11 +5,12 @@
     {% load static %}
     <script src="{% static 'validations_login.js' %}"></script>
 
-    <title>Sign In - Royal Carpet Cleaning</title>
+    <title>{% include "partials/Company_name.html" %}</title>
 </head>
 <body class="">
     <div class="container-fluid">
-        <h1 class="text-center flex-wrap mt-3">Please Sign In</h1>
+        {% include "partials/navbar.html" %}
+        <h1 class="text-center flex-wrap mt-3">heading1</h1>
         <div class="d-flex flex-wrap justify-content-center">
             <!-- registration div -->
             <div class="p-4">
