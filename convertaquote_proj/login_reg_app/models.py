@@ -1,8 +1,8 @@
 from django.db import models
-from datetime import datetime, timedelta
+# from datetime import datetime, timedelta
 import re
 
-class UserManager(models.Manager):
+class CustomerManager(models.Manager):
     def register_validator(self, postData):
         errors = {}
         # run all the functions and sum all the errors into one dictionary
@@ -42,7 +42,7 @@ class UserManager(models.Manager):
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
         if not EMAIL_REGEX.match(postData['email']):    # test whether a field matches the pattern            
             error = ("Invalid email address.")
-        if len(USER.objects.filter(email=postData['email'].lower())) > 0:
+        if len(CUSTOMER.objects.filter(email=postData['email'].lower())) > 0:
             error = "Email already taken, email should be unique"
         return error
 
@@ -59,14 +59,9 @@ class UserManager(models.Manager):
             error = "Passwords need to match."
         return error
 
-class USER(models.Model):
+class CUSTOMER(models.Model):
     first_name = models.CharField(max_length=45)
     last_name = models.CharField(max_length=45)
-
-    address = models.CharField(max_length=45)
-    address2 = models.CharField(max_length=45)
-    state = models.CharField(max_length=2)
-    zipcode = models.IntegerField(max_length=5)
 
     primaryPhone = models.CharField(max_length=15)
     secondaryPhone = models.CharField(max_length=15)
@@ -76,4 +71,28 @@ class USER(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    objects = UserManager()
+    #addresses = list of SERVICE_ADDRESS'es that the customer can order service on
+    #quotes = list of quotes the customer created
+
+    objects = CustomerManager()
+
+
+class AddressManager(models.Manager):
+    def address_validator(self, postData):
+        errors = {}
+        # run all the functions and sum all the errors into one dictionary
+        # The keys in 'errors' need to be empty if no errors
+        return errors
+
+
+class SERVICE_ADDRESS(models.Model):
+
+    address = models.CharField(max_length=45)
+    address2 = models.CharField(max_length=45)
+    state = models.CharField(max_length=2)
+    zipcode = models.IntegerField(max_length=5)
+
+    customer = models.ForeignKey(CUSTOMER, related_name="addresses", on_delete=models.CASCADE) #a customer who this ervice address belongs to
+    # orders = lists which orders the address is used on
+
+    objects = AddressManager()
