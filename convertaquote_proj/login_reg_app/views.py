@@ -63,7 +63,7 @@ def logining(request):
 def logout(request):
     if request.method == 'POST':
         request.session.flush()
-    return redirect('/login')
+    return redirect('/signin/login')
 
 #--------------------------------------------------------
 # Main this should be in other app

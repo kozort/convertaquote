@@ -4,32 +4,34 @@ from .models import ITEM_CATEGORY, ITEM_OPTION, ITEM, ADDED_ITEM, QUOTE, ORDER, 
 from django.contrib import messages
 from datetime import datetime
 
+def index(request):
+    return redirect('/quote')
 
 def quote_page(request):
     return render(request, 'new_quote.html')
 
 def schedule(request):
-    return redirect('')
+    return redirect('/')
 
 def address(request):
-    return redirect('')
+    return redirect('/')
 
 def revieworder(request):
-    return redirect('')
+    return redirect('/')
 
 def billing(request):
-    return redirect('')
+    return redirect('/')
 
 def savedquotes(request):
-    return redirect('')
+    return redirect('/')
 
 def save(request):
-    return redirect('')
+    return redirect('/')
 
 def account(request):
-    return redirect('')
+    return redirect('/')
 
 def manage_address(request):
-    return redirect('')
+    return redirect('/')
 
 

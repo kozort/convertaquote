@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+app_name = 'quote'
 urlpatterns = [
     path('', views.quote_page,),
     path('new', views.quote_page, name="new_quote"),
