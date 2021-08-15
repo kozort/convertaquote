@@ -10,32 +10,50 @@ class ITEM_CATEGORY(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.name}"
+
 class ITEM_OPTION(models.Model):
     name = models.CharField(max_length=45) #naming convention should be itemName_package (ex. carpetRoom_basic, or hallway_pro)
     description = models.CharField(max_length=255)
-    price_unit = models.DecimalField(max_digits=7, decimal_places=2)
+
+    category = models.ForeignKey(ITEM_CATEGORY, related_name="options", on_delete=models.CASCADE, null=True)
     #items = the items that have this option
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.category.name}: {self.name}"
+
 class ITEM(models.Model):
-    name = models.CharField(max_length=45)
+    name_short = models.CharField(max_length=45)
+    name_Long = models.CharField(max_length=90, blank=True)
+    price_basic = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+    price_add_plus = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    price_add_pro = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    
     category = models.ForeignKey(ITEM_CATEGORY, related_name="items", on_delete=models.CASCADE)
-    options = models.ManyToManyField(ITEM_OPTION, related_name="items") #up to three options per item allowed: 1=basic, 2=plus, 3=pro
+    options = models.ManyToManyField(ITEM_OPTION, related_name="items", blank=True) #up to three options per item allowed: 1=basic, 2=plus, 3=pro
     #line_item = the added_item this item is on, which include the qty of this item and the selected package
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.name_short}"
+
 class ADDED_ITEM(models.Model):
     item = models.ForeignKey(ITEM, related_name="line_item", on_delete=models.CASCADE)
-    qty = models.IntegerField(max_length=4)
-    package = models.IntegerField(max_length=1) #package type is identified numerically, 1=basic, 2=plus, 3=pro
+    qty = models.IntegerField()
+    package = models.IntegerField() #package type is identified numerically, 1=basic, 2=plus, 3=pro
     #quotes = the quotes this line item is on
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Item:{self.item.name}, QTY: {self.qty}, package:{self.package}"
 
 class QUOTE(models.Model):
     added_items = models.ManyToManyField(ADDED_ITEM, related_name="quotes") #the line items on this quote
@@ -45,6 +63,9 @@ class QUOTE(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.id} for: {self.customer.first_name}"
 
 class ORDER(models.Model):
     service_date = models.DateField()
@@ -57,6 +78,9 @@ class ORDER(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.id} for: {self.quote.customer.first_name}"
+
 class RECEIPT(models.Model):
     paid_date_time = models.DateTimeField()
     paid_amount = models.DecimalField(max_digits=7, decimal_places=2)
@@ -66,3 +90,6 @@ class RECEIPT(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.id} for: {self.order.quote.customer.first_name}"

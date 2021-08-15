@@ -76,6 +76,9 @@ class CUSTOMER(models.Model):
 
     objects = CustomerManager()
 
+    def __str__(self):
+        return f"{self.first_name}, {self.last_name}"
+
 
 class AddressManager(models.Manager):
     def address_validator(self, postData):
@@ -88,11 +91,14 @@ class AddressManager(models.Manager):
 class SERVICE_ADDRESS(models.Model):
 
     address = models.CharField(max_length=45)
-    address2 = models.CharField(max_length=45)
+    address2 = models.CharField(max_length=45, blank=True)
     state = models.CharField(max_length=2)
-    zipcode = models.IntegerField(max_length=5)
+    zipcode = models.IntegerField()
 
     customer = models.ForeignKey(CUSTOMER, related_name="addresses", on_delete=models.CASCADE) #a customer who this ervice address belongs to
     # orders = lists which orders the address is used on
 
     objects = AddressManager()
+
+    def __str__(self):
+        return f"{self.address}, {self.address2}, {self.state}, {self.zipcode}"
