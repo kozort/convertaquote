@@ -72,6 +72,7 @@ class CUSTOMER(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     #addresses = list of SERVICE_ADDRESS'es that the customer can order service on
+    #added_items = list of items and quantities the customer added to a quote
     #quotes = list of quotes the customer created
 
     objects = CustomerManager()

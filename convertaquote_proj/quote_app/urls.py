@@ -15,4 +15,7 @@ urlpatterns = [
 
     path('account', views.account,  name="account"),
     path('manage_address', views.manage_address,  name="manage_address"),
+
+    # AJAX to select a service and put it in session and then to table
+    path('pickitem/<int:itemID>', views.pick_item,  name="pickitem"),
 ]

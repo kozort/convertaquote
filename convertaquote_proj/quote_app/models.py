@@ -35,7 +35,7 @@ class ITEM(models.Model):
     
     category = models.ForeignKey(ITEM_CATEGORY, related_name="items", on_delete=models.CASCADE)
     options = models.ManyToManyField(ITEM_OPTION, related_name="items", blank=True) #up to three options per item allowed: 1=basic, 2=plus, 3=pro
-    #line_item = the added_item this item is on, which include the qty of this item and the selected package
+    #on_line_items = the added_item this item is on, which include the qty of this item and the selected package
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -44,16 +44,17 @@ class ITEM(models.Model):
         return f"{self.name_short}"
 
 class ADDED_ITEM(models.Model):
-    item = models.ForeignKey(ITEM, related_name="line_item", on_delete=models.CASCADE)
+    item = models.ForeignKey(ITEM, related_name="on_line_items", on_delete=models.CASCADE)
     qty = models.IntegerField()
     package = models.IntegerField() #package type is identified numerically, 1=basic, 2=plus, 3=pro
     #quotes = the quotes this line item is on
+    customer = models.ForeignKey(CUSTOMER, related_name="added_items", on_delete=models.CASCADE, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Item:{self.item.name}, QTY: {self.qty}, package:{self.package}"
+        return f"Item:{self.item.name_short}, QTY: {self.qty}, package:{self.package}"
 
 class QUOTE(models.Model):
     added_items = models.ManyToManyField(ADDED_ITEM, related_name="quotes") #the line items on this quote
