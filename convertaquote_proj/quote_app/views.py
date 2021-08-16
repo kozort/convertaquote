@@ -8,7 +8,11 @@ def index(request):
     return redirect('/quote')
 
 def quote_page(request):
-    return render(request, 'new_quote.html')
+    context = {
+        "Categories": ITEM_CATEGORY.objects.all(),
+        "Items": ITEM.objects.all()
+        }
+    return render(request, 'new_quote.html', context)
 
 def schedule(request):
     return redirect('/')
@@ -33,5 +37,3 @@ def account(request):
 
 def manage_address(request):
     return redirect('/')
-
-
