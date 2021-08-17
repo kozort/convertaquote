@@ -4,7 +4,7 @@ $(document).ready(function()
     { 
         $.ajax
         ({
-            method: "GET",   
+            method: "POST",   
             url: "/quote/pickitem/1",
         })
         .done(function(response)

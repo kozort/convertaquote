@@ -18,13 +18,24 @@ def quote_page(request):
     return render(request, 'new_quote.html', context)
 
 def pick_item(request, itemID):
+    print('in pick_item view')
+    context = {
+        "Categories": ITEM_CATEGORY.objects.all(),
+        "Items": ITEM.objects.all()
+        }
     try:
         request.session[f'{itemID}']
+        print('in try')
+        print('returning partials/optionsTable.html')
+        return render(request, 'partials/optionsTable.html')
     except:
+        print('in except')
         request.session[f'{itemID}'] = itemID
         request.session[f'qty{itemID}'] = 1
         request.session[f'package{itemID}'] = 1
-        return render(request, 'partials/optionsTable.html')
+        print('returning partials/optionsTable.html')
+        return render(request, 'partials/optionsTable.html', context)
+    print('returning /quote')
     return redirect('/quote')
 
 def update_item(request, added_itemID):
