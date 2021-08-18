@@ -1,11 +1,8 @@
-test
-{% for item in Items %}
-testfor
-{{ item.id }}
-    {% if item.id in request.session %}
+{% for item in Added %}
+    inside for
     {{ item.id }}
     <tr class="table-primary">
-        <th scope="row">{{item.name_Long}}</th>
+        <th scope="row">{{ item.name_Long }}</th>
         <td>
         <div class="form-group">
             <input style="max-width: 3rem;" type="number" min="1" max="2000" maxlength="4" size="2" value="1" name="qtySelect{{item.id}}" id="qtySelect{{item.id}}"></input>
@@ -28,5 +25,4 @@ testfor
             </fieldset>
         </td>
     </tr>
-    {% endif %}
 {% endfor %}
