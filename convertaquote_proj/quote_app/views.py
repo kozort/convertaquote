@@ -9,15 +9,27 @@ def index(request):
     return redirect('/quote')
 
 def quote_page(request):
-    context = {
-        "Categories": ITEM_CATEGORY.objects.all(),
-        "Items": ITEM.objects.all(),
-        "AddedItems": ADDED_ITEM.objects.all(),
-        }
-    return render(request, 'new_quote.html', context)
+    added_items_array = []
+    try:
+        if request.session['items_array']: 
+            added_items_array = json.loads(request.session['items_array']) 
+            context = {
+                "Categories": ITEM_CATEGORY.objects.all(),
+                "Items": ITEM.objects.all(),
+                'Added': added_items_array
+                }
+            return render(request, 'new_quote.html', context) 
+    except:
+        context = {
+            "Categories": ITEM_CATEGORY.objects.all(),
+            "Items": ITEM.objects.all(),
+            }
+        return render(request, 'new_quote.html', context)
 
+
+#AJAX
 def pick_item(request, itemID):
-    print('entered pick_item, printing request.POST:')
+    print('entered pick_item')
     added_items_array = []
     try:
         if request.session['items_array']: #check if session has anything, if it does not then it is first time use; it will error and move to 'except' line
@@ -54,8 +66,7 @@ def pick_item(request, itemID):
         'Added': added_items_array
         }
     return render(request, 'partials/optionsTable.html', context)
-    # print('returning /quote')
-    # return redirect('/quote')
+
 
 def update_item(request, added_itemID):
     pass
