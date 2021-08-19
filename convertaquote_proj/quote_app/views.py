@@ -17,7 +17,7 @@ def quote_page(request):
     return render(request, 'new_quote.html', context)
 
 def pick_item(request, itemID):
-    request.session.flush() # temp. remove this line
+    print('entered pick_item, printing request.POST:')
     added_items_array = []
     try:
         if request.session['items_array']: #check if session has anything, if it does not then it is first time use; it will error and move to 'except' line

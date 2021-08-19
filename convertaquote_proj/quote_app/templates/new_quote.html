@@ -25,7 +25,7 @@
                               
                               {% for item in Items %}
                                 {% if item.category == category%}
-                                <div class="accordion-body btn-outline-secondary" id="accordianItem{{item.id}}">
+                                <div class="accordion-body btn-outline-secondary" id="{{item.id}}_accordianItem">
                                   {{ item.name_Long }}
                                 </div>
                                 {% endif %}
@@ -48,9 +48,7 @@
                         <th scope="col">Package</th>
                       </tr>
                     </thead>
-                    <tbody id="optionsTable">
-                      
-                    </tbody>
+                    <tbody id="optionsTable"></tbody>
                   </table>
             </div>
             <!-- move reviews panel down to the bottom on smaller screens -->

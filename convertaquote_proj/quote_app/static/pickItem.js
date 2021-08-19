@@ -1,18 +1,22 @@
 $(document).ready(function()
 {
-    $('#accordianItem1').click(function()
-    { 
-        $.ajax
-        ({
-            method: "GET",   
-            url: "/quote/pickitem/1",
-        })
-        .done(function(response)
+    $('div').click(function()
+    {
+        this_id = $(this).attr("id");
+        parsedArray = this_id.split("_",2);
+        if (parsedArray[1] == "accordianItem")
         {
-            $('#optionsTable').html(response)  
-        })
-        return false
+            $.ajax
+            ({
+                method: "GET",   
+                url: "/quote/pickitem/"+parsedArray[0],
+            })
+            .done(function(response)
+            {
+                $('#optionsTable').html(response)  
+            })
+            return false
+        } 
     })
-
 })
 
