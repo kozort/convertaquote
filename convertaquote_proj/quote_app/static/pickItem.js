@@ -37,21 +37,36 @@ $(document).ready(function()
             // update item qty
             if(parsedArray[1] == "itemQTYDiv")
             {
-                var data = $("#" + parsedArray[0] + "_itemQTY").serialize()
-                $.ajax
-                ({
-                    method: "POST",   
-                    url: "/quote/updateitem/"+parsedArray[0],
-                    data: data
-                })
-                .done(function(response)
-                {
-                    $('').html(response)  
-                })
-                return false
+                updated_qty_ajax(parsedArray[0])
             } 
         }
     }))
+    $('input').keyup(function()
+    {
+        console.log('keyup triggered')
+        this_id = $(this).attr("id");
+        console.log('this_id: '+this_id)
+        if(parsedArray[1] == "itemQTYDiv")
+        {
+            updated_qty_ajax(parsedArray[0])
+        }
+    })
+    // called by click and keyup actions
+    function updated_qty_ajax(itemID)
+    {
+        var data = $("#" + itemID + "_itemQTY").serialize()
+        $.ajax
+        ({
+            method: "POST",   
+            url: "/quote/updateitem/" + itemID,
+            data: data
+        })
+        .done(function(response)
+        {
+            $('').html(response)  
+        })
+        return false
+    }
 
 })
 

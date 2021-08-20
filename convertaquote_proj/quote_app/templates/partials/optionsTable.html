@@ -2,7 +2,7 @@
     <tr class="table-primary">
         <th scope="row">{{ item.name_Long }}</th>
         <td>
-            <form method="POST" id="{{item.id}}_itemQTY">
+            <form method="POST" action="{% url 'quote:updateitem' itemID=item.id %}" id="{{item.id}}_itemQTY">
                 {% csrf_token %}
                 <div class="form-group" id="{{item.id}}_itemQTYDiv">
                     <input style="max-width: 3rem;" type="number" min="1" max="2000" maxlength="4" size="2" value="{{item.qty}}" name="qtySelect{{item.id}}" id="qtySelect{{item.id}}"></input>
