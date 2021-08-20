@@ -67,6 +67,20 @@ def pick_item(request, itemID):
         }
     return render(request, 'partials/optionsTable.html', context)
 
+def remove_item(request, itemID):
+    added_items_array = json.loads(request.session['items_array'])
+    # find and delete the item that matches id
+    for i in range(len(added_items_array)-1):
+        if added_items_array[i]['id'] == itemID:
+            del added_items_array[i]
+    # put array back in session for next time
+    request.session['items_array'] = json.dumps(added_items_array) #serialize and add to session array so that we can access it the next time around
+    context = {
+        "Categories": ITEM_CATEGORY.objects.all(),
+        "Items": ITEM.objects.all(),
+        'Added': added_items_array
+        }
+    return render(request, 'partials/optionsTable.html', context)
 
 def update_item(request, added_itemID):
     pass
