@@ -1,10 +1,10 @@
 $(document).ready(function()
 {
-    $('div').click(function()
+    $('body').on('click' , 'div', (function()
     {
         this_id = $(this).attr("id");
         console.log('this_id='+this_id)
-        console.log('this='+this)
+        console.log('thisclass='+$(this).attr("class"))
         if (typeof this_id !== 'undefined')
         {
             
@@ -38,7 +38,7 @@ $(document).ready(function()
                 return false
             } 
         }
-    })
+    }))
     
 
 
