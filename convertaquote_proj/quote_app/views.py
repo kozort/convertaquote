@@ -13,20 +13,24 @@ def quote_page(request):
     added_items_array = []
     try:
         if request.session['items_array']: 
-            added_items_array = json.loads(request.session['items_array']) 
-            context = {
-            "Categories": ITEM_CATEGORY.objects.all(),
-            "Items": ITEM.objects.all(),
-            'Added': added_items_array,
-            'Categories_Added': populate_categories(added_items_array)
-            }
-            return render(request, 'new_quote.html', context) 
+            return render(request, 'new_quote.html', getAllContext(request)) 
     except:
         context = {
             "Categories": ITEM_CATEGORY.objects.all(),
             "Items": ITEM.objects.all(),
             }
         return render(request, 'new_quote.html', context)
+
+def getAllContext(request):
+    added_items_array = json.loads(request.session['items_array']) 
+    context = {
+        "Categories": ITEM_CATEGORY.objects.all(),
+        "Items": ITEM.objects.all(),
+        'Added': added_items_array,
+        'Categories_Added': populate_categories(added_items_array)
+    }
+    print('context:', context)
+    return context
 
 
 #AJAX
@@ -59,7 +63,9 @@ def pick_item(request, itemID):
         'name_short':itemm.name_short,
         'price_basic': str(itemm.price_basic),
         'price_add_plus':str(itemm.price_add_plus),
-        'price_add_pro': str(itemm.price_add_pro)
+        'price_add_pro': str(itemm.price_add_pro),
+        'runningPrice': str(itemm.price_basic),
+        'chosenPackgePrice': str(itemm.price_basic),
         }) #its better to add all this stuff here through one querry 
     request.session['items_array'] = json.dumps(added_items_array) #serialize and add to session array so that we can access it the next time around
     context = {
@@ -91,7 +97,9 @@ def update_item(request, itemID):
         added_items_array = json.loads(request.session['items_array'])
         for i in range(len(added_items_array)):
             if added_items_array[i]['id'] == itemID:
-                added_items_array[i]['qty'] = request.POST[f'qtySelect{itemID}']
+                qty = int(request.POST[f'qtySelect{itemID}'])
+                added_items_array[i]['qty'] = qty
+                added_items_array[i]['runningPrice'] = str(qty * float(added_items_array[i]['chosenPackgePrice']))
                 request.session['items_array'] = json.dumps(added_items_array)
                 # context = {
                 #     "Categories": ITEM_CATEGORY.objects.all(),
@@ -102,14 +110,7 @@ def update_item(request, itemID):
     return redirect('/')
 
 def update_quote_table(request):
-    added_items_array = json.loads(request.session['items_array'])
-    context = {
-        "Categories": ITEM_CATEGORY.objects.all(),
-        "Items": ITEM.objects.all(),
-        'Added': added_items_array,
-        'Categories_Added': populate_categories(added_items_array)
-        }
-    return render(request, 'partials/quoteTable.html', context)
+    return render(request, 'partials/quoteTable.html', getAllContext(request))
 
 def populate_categories(dict_array):
     categories_added_list = []
