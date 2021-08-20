@@ -53,6 +53,7 @@ def pick_item(request, itemID):
         'id': itemID,
         'qty':1, #defualt quantity=1 
         'package':1, #defualt package=1(basic)
+        'category':itemm.category.name,
         'name_Long':itemm.name_Long, 
         'name_short':itemm.name_short,
         'price_basic': str(itemm.price_basic),
