@@ -19,6 +19,10 @@ $(document).ready(function()
                 {
                     $('#optionsTable').html(response)  
                 })
+                .then(function(response)
+                {
+                    updateQuoteTable()
+                })
                 return false
             } 
             if (parsedArray[1] == "trash")
@@ -31,6 +35,10 @@ $(document).ready(function()
                 .done(function(response)
                 {
                     $('#optionsTable').html(response)  
+                })
+                .then(function(response)
+                {
+                    updateQuoteTable()
                 })
                 return false
             }
@@ -65,8 +73,27 @@ $(document).ready(function()
         {
             $('').html(response)  
         })
+        .then(function(response)
+        {
+            updateQuoteTable()
+        })
         return false
     }
+    // called everytime 2nd table needs to be rendered to be updated
+    function updateQuoteTable()
+    {
+        $.ajax
+        ({
+            method: "GET",   
+            url: "/quote/updatequotetable",
+        })
+        .done(function(response)
+        {
+            $('#quoteTable').html(response)  
+        })
+        return false
+    }
+
 
 })
 

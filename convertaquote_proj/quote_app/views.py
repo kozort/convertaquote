@@ -97,8 +97,17 @@ def update_item(request, itemID):
                 #     "Items": ITEM.objects.all(),
                 #     'Added': added_items_array
                 #     }
-                # return render(request, 'partials/optionsTable.html', context)
+                # return render(request, 'partials/quoteTable.html', context)
     return redirect('/')
+
+def update_quote_table(request):
+    added_items_array = json.loads(request.session['items_array'])
+    context = {
+        "Categories": ITEM_CATEGORY.objects.all(),
+        "Items": ITEM.objects.all(),
+        'Added': added_items_array
+        }
+    return render(request, 'partials/quoteTable.html', context)
 
 def schedule(request):
     return redirect('/')

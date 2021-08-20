@@ -61,14 +61,22 @@
         </div>
         <div class="d-flex flex-wrap">
             <div class="p-4">
+              {% if Added.0 %}
                 <h2>Real Time Quote:</h2>
-                <div class="card text-white bg-primary mb-3 col-sm-10">
-                    <div class="card-header">Header</div>
-                    <div class="card-body">
-                      <h4 class="card-title">Primary card title</h4>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    </div>
-                </div>
+                <table class="table table-borderless">
+                  <thead>
+                    <tr class="table">
+                      <th scope="col">Service</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Package</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="quoteTable">
+                    {% include "partials/quoteTable.html" %}
+                  </tbody>
+                </table>
+                {% endif %}
             </div> 
         </div>
         <!-- move reviews panel down to the bottom on smaller screens -->

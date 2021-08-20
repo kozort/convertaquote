@@ -1,0 +1,38 @@
+{% for category in Categories %}
+    {% for item in Added %}
+        {% if item.category == category.name %}
+            <tr class="table-primary">
+                <td scope="row"><strong>{{ category.name }}:</strong> {{ item.name_Long }}</td>
+                <td>
+                    <form method="POST" action="{% url 'quote:updateitem' itemID=item.id %}" id="{{item.id}}_itemQTY">
+                        {% csrf_token %}
+                        <div class="form-group" id="{{item.id}}_itemQTYDiv">
+                            <input style="max-width: 3rem;" type="number" min="1" max="2000" maxlength="4" size="2" value="{{item.qty}}" name="qtySelect{{item.id}}" id="qtySelect{{item.id}}"></input>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio1" autocomplete="off" checked="">
+                        <label class="btn btn-outline-primary" for="{{item.id}}_btnradio1">Basic</label>
+                        <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio2" autocomplete="off" checked="">
+                        <label class="btn btn-outline-primary" for="{{item.id}}_btnradio2">Plus</label>
+                        <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio3" autocomplete="off" checked="">
+                        <label class="btn btn-outline-primary" for="{{item.id}}_btnradio3">Pro</label>
+                    </div>
+                </td>
+                <td>
+                    <div id="{{item.id}}_trash">
+                        <button type="button" class="btn btn-outline-info rounded-pill" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                        </svg>
+                        <span class="visually-hidden">Button</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
