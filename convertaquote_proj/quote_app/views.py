@@ -15,10 +15,11 @@ def quote_page(request):
         if request.session['items_array']: 
             added_items_array = json.loads(request.session['items_array']) 
             context = {
-                "Categories": ITEM_CATEGORY.objects.all(),
-                "Items": ITEM.objects.all(),
-                'Added': added_items_array
-                }
+            "Categories": ITEM_CATEGORY.objects.all(),
+            "Items": ITEM.objects.all(),
+            'Added': added_items_array,
+            'Categories_Added': populate_categories(added_items_array)
+            }
             return render(request, 'new_quote.html', context) 
     except:
         context = {
@@ -105,9 +106,17 @@ def update_quote_table(request):
     context = {
         "Categories": ITEM_CATEGORY.objects.all(),
         "Items": ITEM.objects.all(),
-        'Added': added_items_array
+        'Added': added_items_array,
+        'Categories_Added': populate_categories(added_items_array)
         }
     return render(request, 'partials/quoteTable.html', context)
+
+def populate_categories(dict_array):
+    categories_added_list = []
+    for dict in dict_array:
+        if not dict['category'] in categories_added_list:
+            categories_added_list.append(dict['category'])
+    return categories_added_list
 
 def schedule(request):
     return redirect('/')
