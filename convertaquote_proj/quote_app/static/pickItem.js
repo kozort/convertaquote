@@ -3,14 +3,11 @@ $(document).ready(function()
     $('body').on('click' , 'div', (function()
     {
         this_id = $(this).attr("id");
-        console.log('this_id='+this_id)
-        console.log('thisclass='+$(this).attr("class"))
+        console.log('this_id: '+this_id)
         if (typeof this_id !== 'undefined')
         {
-            
             parsedArray = this_id.split("_",2);
-            console.log('this_id='+this_id)
-            console.log('parsedArray='+parsedArray)
+            console.log('parsedArray[1]'+parsedArray[1])
             if (parsedArray[1] == "accordianItem")
             {
                 $.ajax
@@ -36,11 +33,25 @@ $(document).ready(function()
                     $('#optionsTable').html(response)  
                 })
                 return false
+            }
+            // update item qty
+            if(parsedArray[1] == "itemQTYDiv")
+            {
+                var data = $("#" + parsedArray[0] + "_itemQTY").serialize()
+                $.ajax
+                ({
+                    method: "POST",   
+                    url: "/quote/updateitem/"+parsedArray[0],
+                    data: data
+                })
+                .done(function(response)
+                {
+                    $('#optionsTable').html(response)  
+                })
+                return false
             } 
         }
     }))
-    
-
 
 })
 

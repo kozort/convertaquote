@@ -67,34 +67,36 @@ def pick_item(request, itemID):
     return render(request, 'partials/optionsTable.html', context)
 
 def remove_item(request, itemID):
-    print('entered remove_item')
     added_items_array = json.loads(request.session['items_array'])
-    
     # find and delete the item that matches id
-    print('len(added_items_array)',len(added_items_array))
     for i in range(len(added_items_array)):
-        print('itemID=',itemID)
-        print('i=',i)
-        print('added_items_array[i][id]',added_items_array[i]['id'])
         if added_items_array[i]['id'] == itemID:
             print('inside if!')
             del added_items_array[i]
             break
-        print('past if')
     # put array back in session for next time
     request.session['items_array'] = json.dumps(added_items_array) #serialize and add to session array so that we can access it the next time around
-    print('put array in session')
     context = {
         "Categories": ITEM_CATEGORY.objects.all(),
         "Items": ITEM.objects.all(),
         'Added': added_items_array
         }
-    for dict in added_items_array:
-        print(dict)
     return render(request, 'partials/optionsTable.html', context)
 
-def update_item(request, added_itemID):
-    pass
+def update_item(request, itemID):
+    if request.method == 'POST':
+        added_items_array = json.loads(request.session['items_array'])
+        for i in range(len(added_items_array)):
+            if added_items_array[i]['id'] == itemID:
+                added_items_array[i]['qty'] = request.POST[f'qtySelect{itemID}']
+                request.session['items_array'] = json.dumps(added_items_array)
+                context = {
+                    "Categories": ITEM_CATEGORY.objects.all(),
+                    "Items": ITEM.objects.all(),
+                    'Added': added_items_array
+                    }
+                return render(request, 'partials/optionsTable.html', context)
+    return redirect('/')
 
 def schedule(request):
     return redirect('/')

@@ -2,25 +2,22 @@
     <tr class="table-primary">
         <th scope="row">{{ item.name_Long }}</th>
         <td>
-        <div class="form-group">
-            <input style="max-width: 3rem;" type="number" min="1" max="2000" maxlength="4" size="2" value="1" name="qtySelect{{item.id}}" id="qtySelect{{item.id}}"></input>
-        </div>
+            <form method="POST" id="{{item.id}}_itemQTY">
+                {% csrf_token %}
+                <div class="form-group" id="{{item.id}}_itemQTYDiv">
+                    <input style="max-width: 3rem;" type="number" min="1" max="2000" maxlength="4" size="2" value="{{item.qty}}" name="qtySelect{{item.id}}" id="qtySelect{{item.id}}"></input>
+                </div>
+            </form>
         </td>
         <td>
-            <fieldset class="form-group">
-                <label class="form-check-label px-1">
-                    <input type="radio" class="form-check-input" name="selectPackage{{item.id}}" id="{{item.id}}package1" value="1" checked="">
-                    Basic
-                </label>
-                <label class="form-check-label px-1">
-                    <input type="radio" class="form-check-input" name="selectPackage{{item.id}}" id="{{item.id}}package2" value="option2">
-                    Plus
-                </label>
-                <label class="form-check-label px-1">
-                    <input type="radio" class="form-check-input" name="selectPackage{{item.id}}" id="{{item.id}}package3" value="option3">
-                    Pro
-                </label>
-            </fieldset>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio1" autocomplete="off" checked="">
+                <label class="btn btn-outline-primary" for="{{item.id}}_btnradio1">Basic</label>
+                <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio2" autocomplete="off" checked="">
+                <label class="btn btn-outline-primary" for="{{item.id}}_btnradio2">Plus</label>
+                <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio3" autocomplete="off" checked="">
+                <label class="btn btn-outline-primary" for="{{item.id}}_btnradio3">Pro</label>
+            </div>
         </td>
         <td>
             <div id="{{item.id}}_trash">

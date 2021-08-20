@@ -19,4 +19,5 @@ urlpatterns = [
     # AJAX to select a service and put it in session and then to table
     path('pickitem/<int:itemID>', views.pick_item,  name="pickitem"),
     path('updateitem/<int:itemID>/remove', views.remove_item,  name="pickitem"),
+    path('updateitem/<int:itemID>', views.update_item,  name="pickitem"),
 ]
