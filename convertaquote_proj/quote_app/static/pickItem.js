@@ -46,7 +46,7 @@ $(document).ready(function()
                 })
                 .done(function(response)
                 {
-                    $('#optionsTable').html(response)  
+                    $('').html(response)  
                 })
                 return false
             } 

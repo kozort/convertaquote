@@ -9,6 +9,7 @@ def index(request):
     return redirect('/quote')
 
 def quote_page(request):
+    #NEED TO FIX: when user hits enter on qty form then it sends a post request to this address
     added_items_array = []
     try:
         if request.session['items_array']: 
@@ -90,12 +91,12 @@ def update_item(request, itemID):
             if added_items_array[i]['id'] == itemID:
                 added_items_array[i]['qty'] = request.POST[f'qtySelect{itemID}']
                 request.session['items_array'] = json.dumps(added_items_array)
-                context = {
-                    "Categories": ITEM_CATEGORY.objects.all(),
-                    "Items": ITEM.objects.all(),
-                    'Added': added_items_array
-                    }
-                return render(request, 'partials/optionsTable.html', context)
+                # context = {
+                #     "Categories": ITEM_CATEGORY.objects.all(),
+                #     "Items": ITEM.objects.all(),
+                #     'Added': added_items_array
+                #     }
+                # return render(request, 'partials/optionsTable.html', context)
     return redirect('/')
 
 def schedule(request):
