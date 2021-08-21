@@ -5,6 +5,8 @@ from django.contrib import messages
 from datetime import datetime
 import json
 
+taxrate = 0.1
+
 def index(request):
     return redirect('/quote')
 
@@ -22,11 +24,19 @@ def quote_page(request):
 
 def getAllContext(request):
     added_items_array = json.loads(request.session['items_array']) 
+    subtotal = 0.00
+    for dict in added_items_array:
+        subtotal += float(dict['runningPrice'])
+    tax = subtotal * taxrate
+    total = subtotal + tax
     context = {
         "Categories": ITEM_CATEGORY.objects.all(),
         "Items": ITEM.objects.all(),
         'Added': added_items_array,
-        'Categories_Added': populate_categories(added_items_array)
+        'Categories_Added': populate_categories(added_items_array),
+        'subtotal': subtotal,
+        'tax': tax,
+        'total': total
     }
     # print all context
     # for cat in context['Categories']:
@@ -43,6 +53,12 @@ def getAllContext(request):
     #     print(f'Categories_Added: ', Categories_Added)
     return context
 
+def populate_categories(dict_array):
+    categories_added_list = []
+    for dict in dict_array:
+        if not dict['category'] in categories_added_list:
+            categories_added_list.append(dict['category'])
+    return categories_added_list
 
 #AJAX
 def pick_item(request, itemID):
@@ -54,12 +70,7 @@ def pick_item(request, itemID):
             for dict in added_items_array:
                 if dict['id'] == itemID:
                     #change nothing, put the context back and just return
-                    context = {
-                        "Categories": ITEM_CATEGORY.objects.all(),
-                        "Items": ITEM.objects.all(),
-                        'Added': added_items_array
-                        }
-                    return render(request, 'partials/optionsTable.html', context) 
+                    return render(request, 'partials/optionsTable.html', getAllContext(request)) 
             # if we completed the loop and did not return the html page then the item is not in the array
     except:
         pass
@@ -77,7 +88,7 @@ def pick_item(request, itemID):
         'price_add_pro': str(itemm.price_add_pro),
         'runningPrice': str(itemm.price_basic),
         'chosenPackgePrice': str(itemm.price_basic),
-        }) #its better to add all this stuff here through one query 
+        }) #its better to add all this stuff here through one query
     request.session['items_array'] = json.dumps(added_items_array) #serialize and add to session array so that we can access it the next time around
     return render(request, 'partials/optionsTable.html', getAllContext(request))
 
@@ -131,13 +142,6 @@ def update_item_package(request, package, itemID):
 
 def update_quote_table(request):
     return render(request, 'partials/quoteTable.html', getAllContext(request))
-
-def populate_categories(dict_array):
-    categories_added_list = []
-    for dict in dict_array:
-        if not dict['category'] in categories_added_list:
-            categories_added_list.append(dict['category'])
-    return categories_added_list
 
 def schedule(request):
     return redirect('/')

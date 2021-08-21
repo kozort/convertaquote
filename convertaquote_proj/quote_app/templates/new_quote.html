@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row d-flex flex-wrap">
             <div class="col-md-auto p-3">
-                <h2 class="">1. Select Service:  </h2>
+                <h2 class="">1. Select Services:  </h2>
                   <div class="accordion" id="accordionExample">
                           {% for category in Categories %}
                           <div class="accordion-item">
@@ -60,23 +60,9 @@
             </div>
         </div>
         <div class="d-flex flex-wrap">
-            <div class="p-4">
-              {% if Added.0 %}
-                <h2>Real Time Quote:</h2>
-                <table class="table bg-success bg-opacity-10">
-                  <thead>
-                    <tr class="table">
-                      <th scope="col">Service</th>
-                      <th scope="col">Quantity</th>
-                      <th scope="col">Package</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody id="quoteTable">
-                    {% include "partials/quoteTable.html" %}
-                  </tbody>
-                </table>
-                {% endif %}
+            <div class="p-4" id="quoteTable">
+              {% include "partials/quoteTable.html" %}
+              
             </div> 
         </div>
         <!-- move reviews panel down to the bottom on smaller screens -->

@@ -1,26 +1,43 @@
-{% for category in Categories_Added %}
-    <tr class="table">
-        <td scope="row"><strong>{{ category }}:</strong></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    {% for item in Added %}
-        {% if item.category == category %}
-            
+{% if Added.0 %}
+    <h2>3. Your Real Time Quote:</h2>
+    <table class="table bg-success bg-opacity-10">
+        <thead>
+        <tr class="table">
+            <th scope="col">Service</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Package</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody >
+        {% for category in Categories_Added %}
             <tr class="table">
-                <td scope="row">{{ item.name_Long }}</td>
-                <td>
-                    {{item.qty}}
-                </td>
-                <td>
-                    {{item.package}}
-                </td>
-                <td>
-                    ${{item.runningPrice}}
-                </td>
+                <td scope="row"><strong>{{ category }}:</strong></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
-        {% endif %}
-    {% endfor %}
-{% endfor %}
+            {% for item in Added %}
+                {% if item.category == category %}
+                    
+                    <tr class="table">
+                        <td scope="row">{{ item.name_Long }}</td>
+                        <td>
+                            {{item.qty}}
+                        </td>
+                        <td>
+                            {{item.package}}
+                        </td>
+                        <td>
+                            ${{item.runningPrice}}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+
