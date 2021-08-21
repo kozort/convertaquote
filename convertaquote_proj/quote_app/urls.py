@@ -12,9 +12,10 @@ urlpatterns = [
 
     path('clear', views.clear_quote,  name="clear_quote"),
     path('save', views.save,  name="save_quote"),
+    path('saving', views.saving,  name="saving_quote"),
     path('savedquotes', views.savedquotes,  name="savedquotes"),
 
-    path('account', views.account,  name="account"),
+    path('myaccount', views.account,  name="account"),
     path('manage_address', views.manage_address,  name="manage_address"),
 
     # AJAX to select a service and put it in session and then to table

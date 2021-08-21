@@ -46,7 +46,7 @@ class ITEM(models.Model):
 class ADDED_ITEM(models.Model):
     item = models.ForeignKey(ITEM, related_name="on_line_items", on_delete=models.CASCADE)
     qty = models.IntegerField()
-    package = models.IntegerField() #package type is identified numerically, 1=basic, 2=plus, 3=pro
+    package = models.CharField(max_length=45) #package name here is only one of three: 'basic', 'plus', 'pro'
     #quotes = the quotes this line item is on
     customer = models.ForeignKey(CUSTOMER, related_name="added_items", on_delete=models.CASCADE, null=True)
 
@@ -57,7 +57,8 @@ class ADDED_ITEM(models.Model):
         return f"Item:{self.item.name_short}, QTY: {self.qty}, package:{self.package}"
 
 class QUOTE(models.Model):
-    added_items = models.ManyToManyField(ADDED_ITEM, related_name="quotes") #the line items on this quote
+    name = models.CharField(max_length=95, null=True)
+    added_items = models.ManyToManyField(ADDED_ITEM, related_name="quotes", blank=True) #the line items on this quote
 
     # orders = lists which orders these quotes are copied to
     customer = models.ForeignKey(CUSTOMER, related_name="quotes", on_delete=models.CASCADE) #customer can have many saved quotes

@@ -146,7 +146,6 @@ def update_quote_table(request):
 
 def clear_quote(request):
     request.session['items_array'] = ''
-    print(request.session['items_array'])
     return redirect('/')
 
 def save(request):
@@ -164,6 +163,37 @@ def save(request):
             return redirect('/signin/login')
     return redirect('/')
 
+def saving(request):
+    if request.method == 'POST':
+        # try:
+            print('inside try')
+            customer_curr = CUSTOMER.objects.get(id=request.session['customerid'])
+            print('customer_curr=', customer_curr)
+            QUOTE.objects.create(
+                    name = request.POST['quoteName'],
+                    customer = customer_curr
+                )
+            print('created quote')
+            added_items_array = json.loads(request.session['items_array']) 
+            for dict in added_items_array:
+                ADDED_ITEM.objects.create(
+                        item = ITEM.objects.get(id=dict['id']),
+                        qty = dict['qty'],
+                        package = dict['package'],
+                        customer = customer_curr
+                    )
+                ADDED_ITEM.objects.last().quotes.add(QUOTE.objects.last())
+                print('created added_item')
+            return redirect('/quote/savedquotes')
+        # except:
+        #     print('in except')
+        #     return redirect('/signin/login')
+    print('about to redirect to "/"')
+    return redirect('/')
+
+def savedquotes(request):
+    return render(request, 'savedQuotes.html')
+
 def schedule(request):
     if request.method == 'POST':
         pass
@@ -178,8 +208,7 @@ def revieworder(request):
 def billing(request):
     return redirect('/')
 
-def savedquotes(request):
-    return redirect('/')
+
 
 
 
