@@ -71,6 +71,26 @@
         </tr>
         </tbody>
     </table>
+    <!-- buttons for quote -->
+    <div class="row">
+        <div class="col-auto">
+          <a href="{% url 'quote:clear_quote' %}" class="btn btn-outline-danger">Clear</a>
+        </div>
+        <div class="col">
+          <form action="{% url 'quote:save_quote' %}">
+            {% csrf_token %}
+            <button type="button" class="btn btn-outline-info">Save</button>
+          </form>
+        </div>
+      
+
+        <div class="col-auto">
+          <form action="{% url 'quote:schedule' %}" method="POST">
+            {% csrf_token %}
+            <button type="button" class="btn btn-success">Schedule Now</button> 
+          </form>
+        </div>
+      </div>
 {% endif %}
 
 

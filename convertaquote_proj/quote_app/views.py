@@ -11,16 +11,18 @@ def index(request):
     return redirect('/quote')
 
 def quote_page(request):
+    print('quote page')
     added_items_array = []
     try:
         if request.session['items_array']: 
             return render(request, 'new_quote.html', getAllContext(request)) 
     except:
-        context = {
-            "Categories": ITEM_CATEGORY.objects.all(),
-            "Items": ITEM.objects.all(),
-            }
-        return render(request, 'new_quote.html', context)
+        pass
+    context = {
+        "Categories": ITEM_CATEGORY.objects.all(),
+        "Items": ITEM.objects.all(),
+        }
+    return render(request, 'new_quote.html', context)
 
 def getAllContext(request):
     added_items_array = json.loads(request.session['items_array']) 
@@ -142,7 +144,19 @@ def update_item_package(request, package, itemID):
 def update_quote_table(request):
     return render(request, 'partials/quoteTable.html', getAllContext(request))
 
+def clear_quote(request):
+    request.session['items_array'] = ''
+    print(request.session['items_array'])
+    return redirect('/')
+
+def save(request):
+    if request.method == 'POST':
+        pass
+    return redirect('/')
+
 def schedule(request):
+    if request.method == 'POST':
+        pass
     return redirect('/')
 
 def address(request):
@@ -157,8 +171,7 @@ def billing(request):
 def savedquotes(request):
     return redirect('/')
 
-def save(request):
-    return redirect('/')
+
 
 def account(request):
     return redirect('/')
