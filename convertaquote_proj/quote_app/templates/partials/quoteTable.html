@@ -23,21 +23,57 @@
                     
                     <tr class="table">
                         <td scope="row">{{ item.name_Long }}</td>
-                        <td>
+                        <td class="text-center">
                             {{item.qty}}
                         </td>
-                        <td>
+                        <td class="text-center">
                             {{item.package}}
                         </td>
-                        <td>
+                        <td class="text-end">
                             ${{item.runningPrice}}
                         </td>
                     </tr>
                 {% endif %}
             {% endfor %}
         {% endfor %}
+        <tr class="table">
+            <td scope="row"></td>
+            <td></td>
+            <td class="text-end">
+                <strong>Subtotal:</strong>
+            </td>
+            
+            <td class="text-end">
+                ${{subtotal}}
+            </td>
+        </tr>
+        <tr class="table">
+            <td scope="row"></td>
+            <td></td>
+            <td class="text-end">
+                <strong>Tax:</strong>
+            </td>
+            
+            <td class="text-end">
+                ${{tax}}
+            </td>
+        </tr>
+        <tr class="table">
+            <td scope="row"></td>
+            <td></td>
+            <td class="text-end">
+                <strong>Total:</strong>
+            </td>
+            
+            <td class="text-end">
+                ${{total}}
+            </td>
+        </tr>
         </tbody>
     </table>
 {% endif %}
+
+
+
 
 

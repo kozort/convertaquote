@@ -5,7 +5,7 @@ from django.contrib import messages
 from datetime import datetime
 import json
 
-taxrate = 0.1
+taxrate = 0.10
 
 def index(request):
     return redirect('/quote')
@@ -125,7 +125,6 @@ def update_item_package(request, package, itemID):
     for i in range(len(added_items_array)):
         if added_items_array[i]['id'] == itemID:
             qty = int(added_items_array[i]['qty'])
-            print(package)
             added_items_array[i]['package'] = package
             packagePrice = float(added_items_array[i]['price_basic'])
             if package == 'Basic':
