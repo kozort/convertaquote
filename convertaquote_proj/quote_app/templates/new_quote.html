@@ -10,8 +10,9 @@
 <body class="">
   {% include "partials/navbar.html" %}
   <div class="container-fluid">
-    <div class="col-md-auto">
-      <div class="row d-flex flex-wrap">
+    <div class="row">
+    <div class="col-md">
+      <div class="row">
           <div class="col-md-auto p-3">
               <h2 class="">1. Select Services:  </h2>
                 <div class="accordion" id="accordionExample">
@@ -55,11 +56,6 @@
                   </tbody>
                 </table>
           </div>
-          <!-- move reviews panel down to the bottom on smaller screens -->
-          <div class="col-md-auto p-3 d-none d-lg-block">
-            {% include "partials/reviews.html" %}
-          </div>
-          
       </div>
       <!-- quote table -->
       <div class="row d-flex flex-wrap">
@@ -68,19 +64,26 @@
             <div class="p-3" id="quoteTable">
 
               {% include "partials/quoteTable.html" %}
-              
-              <button type="button" class="btn btn-outline-danger">Clear</button>
-              <button type="button" class="btn btn-outline-info">Save</button>
-              <button type="button" class="btn btn-success">Schedule Now</button> 
+              <div class="row">
+                <div class="col">
+                  <button type="button" class="btn btn-outline-danger">Clear</button>
+                  <button type="button" class="btn btn-outline-info">Save</button>
+                </div>
+
+                <div class="col-auto">
+                  <button type="button" class="btn btn-success">Schedule Now</button> 
+                </div>
+            </div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <!-- move reviews panel down to the bottom on smaller screens -->
-    <div class="col-md p-2 d-lg-none text-center">
+    <div class="col-md-auto p-2">
       {% include "partials/reviews.html" %}
     </div>
+  </div>
   </div>
         
 
