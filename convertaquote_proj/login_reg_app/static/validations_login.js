@@ -7,7 +7,7 @@ $(document).ready(function()
         $.ajax
         ({
             method: "POST",   
-            url: "/reg_validate/0",
+            url: "/signin/reg_validate/0",
             data: data
         })
         .done(function(response)
@@ -23,7 +23,7 @@ $(document).ready(function()
         $.ajax
         ({
             method: "POST",   
-            url: "/reg_validate/1",
+            url: "/signin/reg_validate/1",
             data: data
         })
         .done(function(response)
@@ -39,7 +39,7 @@ $(document).ready(function()
         $.ajax
         ({
             method: "POST",   
-            url: "/reg_validate/2",
+            url: "/signin/reg_validate/2",
             data: data
         })
         .done(function(response)
@@ -55,7 +55,7 @@ $(document).ready(function()
         $.ajax
         ({
             method: "POST",   
-            url: "/reg_validate/3",
+            url: "/signin/reg_validate/3",
             data: data
         })
         .done(function(response)
@@ -71,7 +71,7 @@ $(document).ready(function()
             $.ajax
             ({
                 method: "POST",   
-                url: "/reg_validate/4",
+                url: "/signin/reg_validate/4",
                 data: data
             })
             .done(function(response)
