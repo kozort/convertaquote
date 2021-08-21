@@ -64,9 +64,16 @@
       <!-- quote table -->
       <div class="row d-flex flex-wrap">
         <div class="col-sm d-flex flex-wrap">
-            <div class="p-3" id="quoteTable">
+          <div class="row d-flex flex-wrap">
+            <div class="p-3 d-flex flex-wrap" id="quoteTable">
+
               {% include "partials/quoteTable.html" %}
-            </div> 
+              
+              <button type="button" class="btn btn-outline-danger">Clear</button>
+              <button type="button" class="btn btn-outline-info">Save</button>
+              <button type="button" class="btn btn-success">Schedule Now</button> 
+            </div>
+          </div>
         </div>
       </div>
     </div>
