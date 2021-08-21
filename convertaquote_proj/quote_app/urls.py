@@ -20,5 +20,6 @@ urlpatterns = [
     path('pickitem/<int:itemID>', views.pick_item,  name="pickitem"),
     path('updateitem/<int:itemID>/remove', views.remove_item,  name="removeitem"),
     path('updateitem/<int:itemID>', views.update_item,  name="updateitem"),
+    path('updateitem/package/<str:package>/<int:itemID>', views.update_item_package,  name="updateitempackage"),
     path('updatequotetable', views.update_quote_table,  name="updateQuoteTable")
 ]

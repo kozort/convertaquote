@@ -12,14 +12,50 @@
                     </form>
                 </td>
                 <td>
-                    <div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio1" autocomplete="off" checked="">
-                        <label class="btn btn-outline-primary" for="{{item.id}}_btnradio1">Basic</label>
-                        <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio2" autocomplete="off" checked="">
-                        <label class="btn btn-outline-primary" for="{{item.id}}_btnradio2">Plus</label>
-                        <input type="radio" class="btn-check" name="{{item.id}}_btnradio" id="{{item.id}}_btnradio3" autocomplete="off" checked="">
-                        <label class="btn btn-outline-primary" for="{{item.id}}_btnradio3">Pro</label>
-                    </div>
+                    <form id="{{item.id}}_itemPackage">
+                    {% csrf_token %}
+                        <div class="btn-group d-flex flex-wrap" role="group" aria-label="Basic radio toggle button group" id="{{item.id}}_packageSelect">
+                            <input 
+                                type="radio" 
+                                class="btn-check" 
+                                value="Basic" 
+                                name="{{item.id}}_btnradio" 
+                                id="{{item.id}}_btnradio1" 
+                                autocomplete="off" 
+                                checked>
+                            <label 
+                                class="btn btn-outline-primary" 
+                                for="{{item.id}}_btnradio1">
+                                Basic
+                            </label>
+                            <input 
+                                type="radio" 
+                                class="btn-check" 
+                                value="Plus" 
+                                name="{{item.id}}_btnradio" 
+                                id="{{item.id}}_btnradio2" 
+                                autocomplete="off"
+                                checked="">
+                            <label 
+                                class="btn btn-outline-primary" 
+                                for="{{item.id}}_btnradio2">
+                                Plus
+                            </label>
+                            <input 
+                                type="radio" 
+                                class="btn-check" 
+                                value="Pro" 
+                                name="{{item.id}}_btnradio" 
+                                id="{{item.id}}_btnradio3" 
+                                autocomplete="off"
+                                checked="">
+                            <label 
+                                class="btn btn-outline-primary" 
+                                for="{{item.id}}_btnradio3">
+                                Pro
+                            </label>
+                        </div>
+                    </form>
                 </td>
                 <td>
                     <div id="{{item.id}}_trash">

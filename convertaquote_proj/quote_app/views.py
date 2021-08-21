@@ -9,7 +9,6 @@ def index(request):
     return redirect('/quote')
 
 def quote_page(request):
-    #NEED TO FIX: when user hits enter on qty form then it sends a post request to this address
     added_items_array = []
     try:
         if request.session['items_array']: 
@@ -29,7 +28,19 @@ def getAllContext(request):
         'Added': added_items_array,
         'Categories_Added': populate_categories(added_items_array)
     }
-    print('context:', context)
+    # print all context
+    # for cat in context['Categories']:
+    #     print(f'Categories: ', cat)
+
+    # for items in context['Items']:
+    #     print(f'Items: ', items)
+
+    # for Added in context['Added']:
+    #     for k, v in Added.items():
+    #         print(f'{k}: {v}')
+
+    # for Categories_Added in context['Categories_Added']:
+    #     print(f'Categories_Added: ', Categories_Added)
     return context
 
 
@@ -57,7 +68,7 @@ def pick_item(request, itemID):
     added_items_array.append({
         'id': itemID,
         'qty':1, #defualt quantity=1 
-        'package':1, #defualt package=1(basic)
+        'package':'Basic', #defualt package=basic
         'category':itemm.category.name,
         'name_Long':itemm.name_Long, 
         'name_short':itemm.name_short,
@@ -66,31 +77,20 @@ def pick_item(request, itemID):
         'price_add_pro': str(itemm.price_add_pro),
         'runningPrice': str(itemm.price_basic),
         'chosenPackgePrice': str(itemm.price_basic),
-        }) #its better to add all this stuff here through one querry 
+        }) #its better to add all this stuff here through one query 
     request.session['items_array'] = json.dumps(added_items_array) #serialize and add to session array so that we can access it the next time around
-    context = {
-        "Categories": ITEM_CATEGORY.objects.all(),
-        "Items": ITEM.objects.all(),
-        'Added': added_items_array
-        }
-    return render(request, 'partials/optionsTable.html', context)
+    return render(request, 'partials/optionsTable.html', getAllContext(request))
 
 def remove_item(request, itemID):
     added_items_array = json.loads(request.session['items_array'])
     # find and delete the item that matches id
     for i in range(len(added_items_array)):
         if added_items_array[i]['id'] == itemID:
-            print('inside if!')
             del added_items_array[i]
             break
     # put array back in session for next time
     request.session['items_array'] = json.dumps(added_items_array) #serialize and add to session array so that we can access it the next time around
-    context = {
-        "Categories": ITEM_CATEGORY.objects.all(),
-        "Items": ITEM.objects.all(),
-        'Added': added_items_array
-        }
-    return render(request, 'partials/optionsTable.html', context)
+    return render(request, 'partials/optionsTable.html', getAllContext(request))
 
 def update_item(request, itemID):
     if request.method == 'POST':
@@ -107,6 +107,26 @@ def update_item(request, itemID):
                 #     'Added': added_items_array
                 #     }
                 # return render(request, 'partials/quoteTable.html', context)
+    return redirect('/')
+
+def update_item_package(request, package, itemID):
+    added_items_array = json.loads(request.session['items_array'])
+    for i in range(len(added_items_array)):
+        if added_items_array[i]['id'] == itemID:
+            qty = int(added_items_array[i]['qty'])
+            print(package)
+            added_items_array[i]['package'] = package
+            packagePrice = float(added_items_array[i]['price_basic'])
+            if package == 'Basic':
+                pass
+            elif package == 'Plus':
+                packagePrice += float(added_items_array[i]['price_add_plus'])
+            elif package == 'Pro':
+                packagePrice += float(added_items_array[i]['price_add_plus']) + float(added_items_array[i]['price_add_pro'])
+            added_items_array[i]['chosenPackgePrice'] = str(packagePrice)
+            added_items_array[i]['runningPrice'] = str(qty * packagePrice)
+            request.session['items_array'] = json.dumps(added_items_array)
+            return render(request, 'partials/quoteTable.html', getAllContext(request))
     return redirect('/')
 
 def update_quote_table(request):

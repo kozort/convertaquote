@@ -49,6 +49,29 @@ $(document).ready(function()
             } 
         }
     }))
+    $('body').on('click' , 'input', (function()
+    {
+        this_id = $(this).attr("id");
+        console.log('this_id: '+this_id)
+        if (typeof this_id !== 'undefined')
+        {
+            parsedArray = this_id.split("_",2);
+            console.log('parsedArray[1]'+parsedArray[1])
+            // select package and update
+            if (parsedArray[1] == "btnradio1")
+            {
+                updatePackage("Basic", parsedArray[0])
+            }
+            if (parsedArray[1] == "btnradio2")
+            {
+                updatePackage("Plus", parsedArray[0])
+            }  
+            if (parsedArray[1] == "btnradio3")
+            {
+                updatePackage("Pro", parsedArray[0])
+            } 
+        }
+    }))
     $('input').keyup(function()
     {
         console.log('keyup triggered')
@@ -94,6 +117,24 @@ $(document).ready(function()
         return false
     }
 
+    function updatePackage(package, itemID)
+    {
+        $.ajax
+        ({
+            method: "GET",   
+            url: "/quote/updateitem/package/" + package + "/" + itemID,
+        })
+        .done(function(response)
+        {
+            $('').html(response)  
+        })
+        .then(function(response)
+        {
+            updateQuoteTable()
+        })
+        return false
+    }
+    
 
 })
 
