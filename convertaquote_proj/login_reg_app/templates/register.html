@@ -22,15 +22,7 @@
                                 {% endif %}
                             {% endfor %}
                         </ul>
-                    {% endif %}
-                    <div class="row ml-3">
-                        <div id="first_nameMsg"></div>
-                        <div id="last_nameMsg"></div>
-                        <div id="emailMsg"></div>
-                        <div id="passwordMsg"></div>
-                        <div id="confirmPwMsg"></div>
-                    </div>
-                    
+                    {% endif %}     
                     <form action="{% url 'signin:registering' %}" method="POST" id="regForm">
                         {% csrf_token %}
                             <!-- first name -->
@@ -38,6 +30,7 @@
                                 <label for="first_name" class=" col-sm-5 col-form-label p-1">First Name:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="first_name" type="text" id="first_name" class="form-control">
+                                    <div id="first_nameMsg"></div>
                                 </div>
                             </div>
                             <!-- last name -->
@@ -45,6 +38,7 @@
                                 <label for="last_name" class=" col-sm-5 col-form-label p-1">Last Name:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="last_name" type="text" id="last_name" class="form-control">
+                                    <div id="last_nameMsg"></div>
                                 </div>
                             </div>
 
@@ -53,6 +47,7 @@
                                 <label for="address" class=" col-sm-5 col-form-label p-1">Address:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="address" type="text" id="address" class="form-control">
+                                    <div id="addressMsg"></div>
                                 </div>
                             </div>
                             <!-- address2 -->
@@ -67,6 +62,7 @@
                                 <label for="state" class=" col-sm-5 col-form-label p-1">State:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="state" type="text" id="state" class="form-control">
+                                    <div id="stateMsg"></div>
                                 </div>
                             </div>
                             <!-- zipcode -->
@@ -74,6 +70,7 @@
                                 <label for="zipcode" class=" col-sm-5 col-form-label p-1">Zipcode:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="zipcode" type="text" id="zipcode" class="form-control">
+                                    <div id="zipcodeMsg"></div>
                                 </div>
                             </div>
 
@@ -82,6 +79,7 @@
                                 <label for="email" class=" col-sm-5 col-form-label p-1">Email:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="email" type="text" id="email" class="form-control">
+                                    <div id="emailMsg"></div>
                                 </div>
                             </div>
                             <!-- confirm_Email -->
@@ -89,6 +87,7 @@
                                 <label for="confirm_Email" class=" col-sm-5 col-form-label p-1">Confirm Email:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="confirm_Email" type="text" id="confirm_Email" class="form-control">
+                                    <div id="confirm_EmailMsg"></div>
                                 </div>
                             </div>
                             
@@ -97,6 +96,7 @@
                                 <label for="password" class=" col-sm-5 col-form-label p-1">Password:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="password" type="password" id="password" class="form-control">
+                                    <div id="passwordMsg"></div>
                                 </div>
                             </div>
                             <!-- confirm Password -->
@@ -104,6 +104,7 @@
                                 <label for="confirm_PW" class="col-sm-5 col-form-label p-1">Confirm Password:</label>
                                 <div class="col-sm-7 p-1">
                                     <input name="confirm_PW" type="password" id="confirm_PW" class="form-control">
+                                    <div id="confirm_PWMsg"></div>
                                 </div>
                             </div>
                         <!-- row: register -->

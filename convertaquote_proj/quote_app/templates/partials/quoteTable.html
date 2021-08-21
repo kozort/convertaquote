@@ -1,19 +1,18 @@
 {% if Added.0 %}
     <h2>3. Your Real Time Quote:</h2>
-    <table class="table bg-success bg-opacity-10">
+    <table class="table">
         <thead>
-        <tr class="table">
+        <tr class="table bg-success text-light">
             <th scope="col" >Service</th>
             <th scope="col" class="text-center" >Quantity</th>
             <th scope="col" class="text-center" >Package</th>
             <th></th>
         </tr>
         </thead>
-        <tbody >
+        <tbody class="bg-success bg-opacity-10">
         {% for category in Categories_Added %}
             <tr class="table">
-                <td scope="row"><strong>{{ category }}:</strong></td>
-                <td></td>
+                <td class="py-0" scope="row"><strong>{{ category }}:</strong></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -22,14 +21,14 @@
                 {% if item.category == category %}
                     
                     <tr class="table">
-                        <td scope="row">{{ item.name_Long }}</td>
-                        <td class="text-center">
+                        <td class="py-0" scope="row">{{ item.name_Long }}</td>
+                        <td class="text-center py-0">
                             {{item.qty}}
                         </td>
-                        <td class="text-center">
+                        <td class="text-center py-0">
                             {{item.package}}
                         </td>
-                        <td class="text-end">
+                        <td class="text-end py-0">
                             ${{item.runningPrice}}
                         </td>
                     </tr>
@@ -39,34 +38,34 @@
         <tr class="table">
             <td scope="row"></td>
             <td></td>
-            <td class="text-end">
+            <td class="text-end py-0">
                 <strong>Subtotal:</strong>
             </td>
             
-            <td class="text-end">
+            <td class="text-end py-0">
                 ${{subtotal}}
             </td>
         </tr>
         <tr class="table">
             <td scope="row"></td>
             <td></td>
-            <td class="text-end">
+            <td class="text-end py-0">
                 <strong>Tax:</strong>
             </td>
             
-            <td class="text-end">
+            <td class="text-end py-0">
                 ${{tax}}
             </td>
         </tr>
         <tr class="table">
             <td scope="row"></td>
             <td></td>
-            <td class="text-end">
+            <td class="text-end py-0">
                 <strong>Total:</strong>
             </td>
             
-            <td class="text-end">
-                ${{total}}
+            <td class="text-end py-0">
+                <strong>${{total}}</strong>
             </td>
         </tr>
         </tbody>
@@ -77,9 +76,9 @@
           <a href="{% url 'quote:clear_quote' %}" class="btn btn-outline-danger">Clear</a>
         </div>
         <div class="col">
-          <form action="{% url 'quote:save_quote' %}">
+          <form action="{% url 'quote:save_quote' %}" method="POST">
             {% csrf_token %}
-            <button type="button" class="btn btn-outline-info">Save</button>
+            <button type="submit" class="btn btn-outline-info">Save</button>
           </form>
         </div>
       
@@ -87,7 +86,7 @@
         <div class="col-auto">
           <form action="{% url 'quote:schedule' %}" method="POST">
             {% csrf_token %}
-            <button type="button" class="btn btn-success">Schedule Now</button> 
+            <button type="submit" class="btn btn-success">Schedule Now</button> 
           </form>
         </div>
       </div>

@@ -76,7 +76,7 @@ $(document).ready(function()
             })
             .done(function(response)
             {
-                $('#confirmPwMsg').html(response)  
+                $('#confirm_PWMsg').html(response)  
             })
             return false
         })

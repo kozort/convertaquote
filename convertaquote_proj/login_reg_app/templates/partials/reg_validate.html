@@ -1,6 +1,16 @@
+{{error}}
 {% if bad == True %}
-<p class="text-warning m-0">{{error}}</p>
-{% endif %}
-{% if bad == False %}
-<p class="text-success m-0">{{error}}</p>
+    <script>
+    $('#{{divID}}').removeClass('is-valid');
+    $('#{{divID}}').addClass('is-invalid');
+    $('#{{divID}}Msg').removeClass('valid-feedback');
+    $('#{{divID}}Msg').addClass('invalid-feedback');
+    </script>
+{% else %}
+    <script>
+    $('#{{divID}}').removeClass('is-invalid');
+    $('#{{divID}}').addClass('is-valid');
+    $('#{{divID}}Msg').removeClass('invalid-feedback');
+    $('#{{divID}}Msg').addClass('valid-feedback');
+    </script>
 {% endif %}

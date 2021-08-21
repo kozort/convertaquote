@@ -151,7 +151,17 @@ def clear_quote(request):
 
 def save(request):
     if request.method == 'POST':
-        pass
+        try: #check if customer is logged in
+            customer = CUSTOMER.objects.get(id=request.session['customerid'])
+            context = {
+                "Customer": customer,
+                # # myWISHES = only include those customer created AND not granted
+                # "myWISHES": WISH.objects.filter(created_by = customer).exclude(granted = True),
+                # "grantedWISHES": WISH.objects.filter(granted = True)
+                }
+            return render(request, 'savequote.html', context)
+        except:
+            return redirect('/signin/login')
     return redirect('/')
 
 def schedule(request):

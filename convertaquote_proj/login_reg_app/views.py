@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import CUSTOMER
+from .models import CUSTOMER, SERVICE_ADDRESS
 from django.contrib import messages
 from datetime import datetime
 import bcrypt
@@ -33,17 +33,24 @@ def registering(request):
         if len(errors) > 0:
             for key, value in errors.items():
                 messages.error(request, value, extra_tags='register')
-            return redirect('/register')
+            return redirect('/signin/register')
         else:
             CUSTOMER.objects.create(
                 first_name = request.POST['first_name'],
                 last_name = request.POST['last_name'],
-                email = request.POST['email'].lower(), #email not case sensative
+                email = request.POST['email'].lower(), #email not case sensitive
                 password = bcrypt.hashpw(request.POST['password'].encode(), bcrypt.gensalt()).decode()
+            )
+            SERVICE_ADDRESS.objects.create(
+                address = request.POST['address'],
+                address2 = request.POST['address2'],
+                state = request.POST['state'],
+                zipcode = request.POST['zipcode'],
+                customer = CUSTOMER.objects.last()
             )
             request.session['customerid'] = CUSTOMER.objects.last().id
             return redirect('/quote')
-    return redirect('/register')
+    return redirect('/signin/register')
 
 # POST
 def logining(request):
@@ -53,33 +60,17 @@ def logining(request):
             logged_customer = customer[0]
             if bcrypt.checkpw(request.POST['password'].encode(), logged_customer.password.encode()):
                 request.session['customerid'] = logged_customer.id
-                return redirect('/quote')
+                return redirect('/signin/quote')
         else:
             messages.error(request, "Invalid credentials.", extra_tags='login')
-            return redirect('/login')
-    return redirect('/login')
+            return redirect('/signin/login')
+    return redirect('/signin/login')
 
 # POST
 def logout(request):
     if request.method == 'POST':
         request.session.flush()
     return redirect('/signin/login')
-
-#--------------------------------------------------------
-# Main this should be in other app
-#--------------------------------------------------------
-def main(request):
-        try: #check if customer is logged in
-            customer = CUSTOMER.objects.get(id=request.session['customerid'])
-            context = {
-                "Customer": customer,
-                # # myWISHES = only include those customer created AND not granted
-                # "myWISHES": WISH.objects.filter(created_by = customer).exclude(granted = True),
-                # "grantedWISHES": WISH.objects.filter(granted = True)
-                }
-            return render(request, 'quote.html', context)
-        except:
-            return redirect('/quote')
     
 
 
@@ -87,6 +78,7 @@ def main(request):
 def register_validations(request, code):
     if request.method == 'POST':
         bad = False
+        divID = ''
         #code: 0 = first_name, 1 = last_name, 2 = email, 3 = password, 4 = confirm_PW
         if code == 0:
             error = CUSTOMER.objects.reg_first_name(request.POST)
@@ -94,33 +86,40 @@ def register_validations(request, code):
                 bad = True
             else:
                 error = ''
+            divID = 'first_name'
         elif code == 1:
             error = CUSTOMER.objects.reg_last_name(request.POST)
             if len(error) > 0:
                 bad = True
             else:
                 error = ''
+            divID = 'last_name'
         elif code == 2:
             error = CUSTOMER.objects.reg_email(request.POST)
             if len(error) > 0:
                 bad = True
             else:
                 error = 'Email available!'
+            divID = 'email'
         elif code == 3:
             error = CUSTOMER.objects.reg_password(request.POST)
             if len(error) > 0:
                 bad = True
             else:
                 error = 'Strong password!'
+            divID = 'password'
         elif code == 4:
             error = CUSTOMER.objects.reg_confirm_PW(request.POST)
             if len(error) > 0:
                 bad = True
             else:
                 error = 'Passwords match!'
+            divID = 'confirm_PW'
         context = {
             'bad': bad,
-            'error': error
+            'error': error,
+            'divID': divID
         }
+        print(context['error'])
         return render(request, 'partials/reg_validate.html', context)  
     return redirect('/register')
