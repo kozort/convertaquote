@@ -10,6 +10,7 @@ def login(request):
     try: 
         if request.session['customerid']:
             context = {"Customer": CUSTOMER.objects.get(id=request.session['customerid'])}
+            print(request.session['customerid'])
             return redirect('/quote/myaccount')
     except:
         return render(request, 'login.html')
@@ -60,7 +61,7 @@ def logining(request):
             logged_customer = customer[0]
             if bcrypt.checkpw(request.POST['password'].encode(), logged_customer.password.encode()):
                 request.session['customerid'] = logged_customer.id
-                return redirect('/signin/quote')
+                return redirect('/quote')
         else:
             messages.error(request, "Invalid credentials.", extra_tags='login')
             return redirect('/signin/login')
@@ -68,8 +69,7 @@ def logining(request):
 
 # POST
 def logout(request):
-    if request.method == 'POST':
-        request.session.flush()
+    del request.session['customerid']
     return redirect('/signin/login')
     
 
