@@ -14,6 +14,8 @@ urlpatterns = [
     path('save', views.save,  name="save_quote"),
     path('saving', views.saving,  name="saving_quote"),
     path('savedquotes', views.savedquotes,  name="savedquotes"),
+    path('delete/<int:quoteID>', views.destroyQuote,  name="destroyQuote"),
+    path('edit/<int:quoteID>', views.editquote, name="edit_quote"),
 
     path('myaccount', views.account,  name="account"),
     path('manage_address', views.manage_address,  name="manage_address"),

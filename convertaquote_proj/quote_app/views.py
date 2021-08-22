@@ -11,8 +11,6 @@ def index(request):
     return redirect('/quote')
 
 def quote_page(request):
-    print('quote page')
-    added_items_array = []
     try:
         if request.session['items_array']: 
             return render(request, 'new_quote.html', getAllContext(request)) 
@@ -36,9 +34,9 @@ def getAllContext(request):
         "Items": ITEM.objects.all(),
         'Added': added_items_array,
         'Categories_Added': populate_categories(added_items_array),
-        'subtotal': subtotal,
-        'tax': tax,
-        'total': total
+        'subtotal': format(subtotal, ".2f"),
+        'tax': format(tax, ".2f"),
+        'total': format(total, ".2f")
     }
     # print all context
     # for cat in context['Categories']:
@@ -112,7 +110,7 @@ def update_item(request, itemID):
             if added_items_array[i]['id'] == itemID:
                 qty = int(request.POST[f'qtySelect{itemID}'])
                 added_items_array[i]['qty'] = qty
-                added_items_array[i]['runningPrice'] = str(qty * float(added_items_array[i]['chosenPackgePrice']))
+                added_items_array[i]['runningPrice'] = str(format((qty * float(added_items_array[i]['chosenPackgePrice'])), ".2f"))
                 request.session['items_array'] = json.dumps(added_items_array)
                 # context = {
                 #     "Categories": ITEM_CATEGORY.objects.all(),
@@ -135,8 +133,8 @@ def update_item_package(request, package, itemID):
                 packagePrice += float(added_items_array[i]['price_add_plus'])
             elif package == 'Pro':
                 packagePrice += float(added_items_array[i]['price_add_plus']) + float(added_items_array[i]['price_add_pro'])
-            added_items_array[i]['chosenPackgePrice'] = str(packagePrice)
-            added_items_array[i]['runningPrice'] = str(qty * packagePrice)
+            added_items_array[i]['chosenPackgePrice'] = str(format(packagePrice, ".2f"))
+            added_items_array[i]['runningPrice'] = str(format((qty * packagePrice), ".2f"))
             request.session['items_array'] = json.dumps(added_items_array)
             return render(request, 'partials/quoteTable.html', getAllContext(request))
     return redirect('/')
@@ -192,7 +190,41 @@ def saving(request):
     return redirect('/')
 
 def savedquotes(request):
-    return render(request, 'savedQuotes.html')
+    
+    context = {'Quotes': CUSTOMER.objects.get(id=request.session['customerid']).quotes.all()}
+    return render(request, 'savedQuotes.html', context)
+
+def editquote(request, quoteID):
+    
+    quote = QUOTE.objects.get(id=quoteID)
+    added_items_fromQuote = quote.added_items.all()
+    added_items_array = []
+    for added_item in added_items_fromQuote:
+        itemm = added_item.item
+        added_items_array.append({
+            'id': itemm.id,
+            'qty': added_item.qty,
+            'package': added_item.package,
+            'category':itemm.category.name,
+            'name_Long':itemm.name_Long, 
+            'name_short':itemm.name_short,
+            'price_basic': str(itemm.price_basic),
+            'price_add_plus':str(itemm.price_add_plus),
+            'price_add_pro': str(itemm.price_add_pro),
+            'runningPrice': str(itemm.price_basic),
+            'chosenPackgePrice': str(itemm.price_basic),
+            })
+    request.session['items_array'] = '' # clear existing quote in session first
+    request.session['items_array'] = json.dumps(added_items_array)
+    return redirect('/quote/')
+
+def destroyQuote(request, quoteID):
+    if request.method == 'POST':
+        quote = QUOTE.objects.get(id=quoteID)
+        quote.delete()
+    return redirect('/quote/savedquotes')
+
+
 
 def schedule(request):
     if request.method == 'POST':
