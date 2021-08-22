@@ -164,29 +164,31 @@ def save(request):
 def saving(request):
     if request.method == 'POST':
         try:
-            customer_curr = CUSTOMER.objects.get(id=request.session['customerid'])
-            QUOTE.objects.create(
-                    name = request.POST['quoteName'],
-                    customer = customer_curr
-                )
-            added_items_array = json.loads(request.session['items_array']) 
-            for dict in added_items_array:
-                ADDED_ITEM.objects.create(
-                        item = ITEM.objects.get(id=dict['id']),
-                        qty = dict['qty'],
-                        package = dict['package'],
-                        customer = customer_curr
-                    )
-                ADDED_ITEM.objects.last().quotes.add(QUOTE.objects.last())
+            createQuoteFromSession(request, request.POST['quoteName'])
             return redirect('/quote/savedquotes')
         except:
-            print('in except')
             return redirect('/signin/login')
     print('about to redirect to "/"')
     return redirect('/')
 
+def createQuoteFromSession(request, quoteName):
+    customer_curr = CUSTOMER.objects.get(id=request.session['customerid'])
+    added_items_array = json.loads(request.session['items_array']) 
+    QUOTE.objects.create(
+        name = quoteName,
+        customer = customer_curr
+    )
+    for dict in added_items_array:
+        ADDED_ITEM.objects.create(
+                item = ITEM.objects.get(id=dict['id']),
+                qty = dict['qty'],
+                package = dict['package'],
+                customer = customer_curr
+            )
+        ADDED_ITEM.objects.last().quotes.add(QUOTE.objects.last())
+    return QUOTE.objects.last().id
+
 def savedquotes(request):
-    
     context = {'Quotes': CUSTOMER.objects.get(id=request.session['customerid']).quotes.all()}
     return render(request, 'savedQuotes.html', context)
 
@@ -223,7 +225,6 @@ def account(request):
     try: #check if customer is logged in
         customer = CUSTOMER.objects.get(id=request.session['customerid'])
         context = {"customer": customer}
-        print(customer)
         return render(request, 'myaccount.html', context)
     except:
         return redirect('/signin/login')
@@ -240,11 +241,55 @@ def schedule(request):
     except:
         return redirect('/signin/login')
 
+def scheduling(request):
+    if request.method == 'POST':
+        try: #check if customer is logged in
+            if CUSTOMER.objects.get(id=request.session['customerid']):
+                request.session['service_date'] = request.POST['serviceDate']
+                request.session['service_time'] = request.POST['serviceTime']
+                return redirect('/quote/address')
+        except:
+            return redirect('/signin/login')
+    return redirect('/')
+
 def address(request):
+    try: #check if customer is logged in
+        customer = CUSTOMER.objects.get(id=request.session['customerid'])
+        context = {"customer": customer}
+        return render(request, 'address.html', context)
+    except:
+        return redirect('/signin/login')
+
+# creates QUOTE and ORDER here
+def setaddress(request):
+    if request.method == 'POST':
+        try: # createQuote function already asks for customer ID and items_array to be in session. This try catch will tell it what to do if something is missing
+            quoteID = createQuoteFromSession(request, "Quote for order " + datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
+            ORDER.objects.create(
+                service_date = request.session['service_date'],
+                service_time = request.session['service_time'],
+                service_address = SERVICE_ADDRESS.objects.get(id=request.POST['selectedAddressID']),
+                quote = QUOTE.objects.get(id=quoteID)
+            )
+            request.session['currentOrderID'] = ORDER.objects.last().id
+            return redirect('/quote/revieworder')
+        except:
+            return redirect('/signin/login')
     return redirect('/')
 
 def revieworder(request):
-    return redirect('/')
+    try: #check if customer is logged in
+        customer = CUSTOMER.objects.get(id=request.session['customerid'])
+        context = {"customer": customer}
+        return render(request, 'revieworder.html', context)
+    except:
+        return redirect('/signin/login')
+
+def seeReceipt(request):
+    # once a reciept is generated delete this session data
+    del request.session['service_date']
+    del request.session['service_time']
+    del request.session['currentOrderID']
 
 def billing(request):
     return redirect('/')

@@ -6,7 +6,9 @@ urlpatterns = [
     path('', views.quote_page,),
     path('new', views.quote_page, name="new_quote"),
     path('schedule', views.schedule, name="schedule"),
+    path('scheduling', views.scheduling, name="scheduling"),
     path('address', views.address, name="address"),
+    path('setaddress', views.setaddress, name="setaddress"),
     path('revieworder', views.revieworder,  name="revieworder"),
     path('billing', views.billing, name="billing"),
 
