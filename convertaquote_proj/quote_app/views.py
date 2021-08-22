@@ -163,15 +163,12 @@ def save(request):
 
 def saving(request):
     if request.method == 'POST':
-        # try:
-            print('inside try')
+        try:
             customer_curr = CUSTOMER.objects.get(id=request.session['customerid'])
-            print('customer_curr=', customer_curr)
             QUOTE.objects.create(
                     name = request.POST['quoteName'],
                     customer = customer_curr
                 )
-            print('created quote')
             added_items_array = json.loads(request.session['items_array']) 
             for dict in added_items_array:
                 ADDED_ITEM.objects.create(
@@ -181,11 +178,10 @@ def saving(request):
                         customer = customer_curr
                     )
                 ADDED_ITEM.objects.last().quotes.add(QUOTE.objects.last())
-                print('created added_item')
             return redirect('/quote/savedquotes')
-        # except:
-        #     print('in except')
-        #     return redirect('/signin/login')
+        except:
+            print('in except')
+            return redirect('/signin/login')
     print('about to redirect to "/"')
     return redirect('/')
 
@@ -195,7 +191,6 @@ def savedquotes(request):
     return render(request, 'savedQuotes.html', context)
 
 def editquote(request, quoteID):
-    
     quote = QUOTE.objects.get(id=quoteID)
     added_items_fromQuote = quote.added_items.all()
     added_items_array = []
@@ -224,6 +219,15 @@ def destroyQuote(request, quoteID):
         quote.delete()
     return redirect('/quote/savedquotes')
 
+def account(request):
+    try: #check if customer is logged in
+        print('in try')
+        customer = CUSTOMER.objects.get(id=request.session['customerid'])
+        context = {"customer": customer}
+        print(customer)
+        return render(request, 'myaccount.html', context)
+    except:
+        return redirect('/signin/login')
 
 
 def schedule(request):
@@ -244,8 +248,7 @@ def billing(request):
 
 
 
-def account(request):
-    return redirect('/')
+
 
 def manage_address(request):
     return redirect('/')

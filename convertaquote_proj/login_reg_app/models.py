@@ -93,6 +93,7 @@ class SERVICE_ADDRESS(models.Model):
 
     address = models.CharField(max_length=45)
     address2 = models.CharField(max_length=45, blank=True)
+    city = models.CharField(max_length=95, null=True)
     state = models.CharField(max_length=2)
     zipcode = models.IntegerField()
 
