@@ -12,19 +12,16 @@
     <div class="container-fluid">
         <h1 class="text-center flex-wrap mt-3">Save Quote:</h1>
         <div class="d-flex flex-wrap justify-content-center">
-            <!-- registration div -->
             <div class="p-4">
                     <form action="{% url 'quote:saving_quote' %}" method="POST" id="saveQuoteFrom">
                         {% csrf_token %}
 
-                            <!-- Email -->
                             <div class="form-group row p-2">
                                 <label for="quoteName" class=" col-sm-auto col-form-label">Name:</label>
                                 <div class="col-sm p-0">
                                     <input name="quoteName" type="text" id="quoteName" class="form-control">
                                 </div>
                             </div>
-                        <!-- row: login -->
                         <div class="row justify-content-center py-2">
                             <div class=" col text-end">
                                 <a href="/quote" class="btn btn-outline-warning" value="cancel">Cancel</a>

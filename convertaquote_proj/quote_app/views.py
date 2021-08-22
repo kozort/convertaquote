@@ -221,7 +221,6 @@ def destroyQuote(request, quoteID):
 
 def account(request):
     try: #check if customer is logged in
-        print('in try')
         customer = CUSTOMER.objects.get(id=request.session['customerid'])
         context = {"customer": customer}
         print(customer)
@@ -231,9 +230,15 @@ def account(request):
 
 
 def schedule(request):
-    if request.method == 'POST':
-        pass
-    return redirect('/')
+    try: #check if customer is logged in
+        if CUSTOMER.objects.get(id=request.session['customerid']):
+            try:
+                if request.session['items_array']: 
+                    return render(request, 'schedule.html', getAllContext(request)) 
+            except:
+                return redirect('/')
+    except:
+        return redirect('/signin/login')
 
 def address(request):
     return redirect('/')

@@ -1,5 +1,5 @@
 {% if Added.0 %}
-    <h2>3. Your Real Time Quote:</h2>
+    <h2 id="optionsTableHeader">3. Your Real Time Quote:</h2>
     <table class="table">
         <thead>
         <tr class="table bg-success text-light">
@@ -71,7 +71,7 @@
         </tbody>
     </table>
     <!-- buttons for quote -->
-    <div class="row">
+    <div class="row" id="quoteButtons">
         <div class="col-auto">
           <a href="{% url 'quote:clear_quote' %}" class="btn btn-outline-danger">Clear</a>
         </div>
@@ -84,7 +84,7 @@
       
 
         <div class="col-auto">
-          <form action="{% url 'quote:schedule' %}" method="POST">
+          <form action="{% url 'quote:schedule' %}" method="GET">
             {% csrf_token %}
             <button type="submit" class="btn btn-success">Schedule Now</button> 
           </form>
