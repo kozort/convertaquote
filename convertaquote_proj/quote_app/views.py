@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from login_reg_app.models import CUSTOMER, SERVICE_ADDRESS
-from .models import ITEM_CATEGORY, ITEM_OPTION, ITEM, ADDED_ITEM, QUOTE, ORDER, RECEIPT
+from .models import ITEM_CATEGORY, ITEM_OPTION, ITEM, ADDED_ITEM, QUOTE, ORDER
 from django.contrib import messages
 from datetime import date, datetime
 import json
 
 taxrate = 0.10
+deposit = 0.50
 
 def index(request):
     return redirect('/quote')
@@ -216,7 +217,7 @@ def account(request):
     except:
         return redirect('/signin/login')
 
-
+# THIS needs validations!
 def schedule(request):
     try: #check if customer is logged in
         if CUSTOMER.objects.get(id=request.session['customerid']):
@@ -247,7 +248,6 @@ def address(request):
     except:
         return redirect('/signin/login')
 
-# creates QUOTE and ORDER here
 def setaddress(request):
     if request.method == 'POST':
         try: 
@@ -259,9 +259,9 @@ def setaddress(request):
     return redirect('/')
 
 def revieworder(request):
-    # try: #check if customer is logged in
+    try: #check if customer is logged in
         customer = CUSTOMER.objects.get(id=request.session['customerid'])
-
+        
         date = datetime.strptime(request.session['service_date'],'%Y-%m-%d') # parse YYYY-MM-DD
         time = datetime.strptime(request.session['service_time'],'%H:%M') # parse HH:MM (24hr clock)
         dateFormated = date.strftime("%A, %B %-d %Y") #https://strftime.org
@@ -272,14 +272,37 @@ def revieworder(request):
         context["service_time"]  =timeFormated
         context["service_address"] = SERVICE_ADDRESS.objects.get(id=request.session['currentServAddressID'])
         return render(request, 'revieworder.html', context)
-    # except:
-    #     return redirect('/signin/login')
+    except:
+        return redirect('/signin/login')
 
-def seeReceipt(request):
-    # once a reciept is generated delete this session data
-    del request.session['service_date']
-    del request.session['service_time']
-    del request.session['currentServAddressID']
+def submitorder(request):
+    if request.method == 'POST':
+        # try: 
+            data = getAllContext(request) #check if customer is logged in
+            total = float(data['total'])
+            quoteID = createQuoteFromSession(request, datetime.now().strftime('%Y-%m-%d_%H:%M'))
+            print(total)
+            print(deposit)
+            ORDER.objects.create(
+                service_date = request.session['service_date'],
+                service_time = request.session['service_time'],
+                paid_amount = total * deposit,
+                due_amount = total - (total * deposit),
+                service_address = SERVICE_ADDRESS.objects.get(id=request.session['currentServAddressID']),
+                quote = QUOTE.objects.get(id=quoteID)
+            )
+            ORDER.objects.last()
+            # once an order is generated delete this session data
+            del request.session['service_date']
+            del request.session['service_time']
+            del request.session['currentServAddressID']
+            return redirect('/quote/receipt')
+        # except:
+        #     return redirect('/signin/login')
+    return redirect('/')
+
+def receipt(request):
+    return render(request, 'receipt.html', {'Order' : ORDER.objects.last()} )
 
 def billing(request):
     return redirect('/')

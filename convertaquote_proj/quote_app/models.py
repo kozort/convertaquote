@@ -3,6 +3,7 @@ from django.db import models
 from login_reg_app.models import CUSTOMER, SERVICE_ADDRESS
 import re
 
+# created only by admin user
 class ITEM_CATEGORY(models.Model):
     name = models.CharField(max_length=45)
     #items = the items that are in this category
@@ -13,6 +14,7 @@ class ITEM_CATEGORY(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+# created only by admin user
 class ITEM_OPTION(models.Model):
     name = models.CharField(max_length=45) #naming convention should be itemName_package (ex. carpetRoom_basic, or hallway_pro)
     description = models.CharField(max_length=255)
@@ -26,6 +28,7 @@ class ITEM_OPTION(models.Model):
     def __str__(self):
         return f"{self.category.name}: {self.name}"
 
+# created only by admin user
 class ITEM(models.Model):
     name_short = models.CharField(max_length=45)
     name_Long = models.CharField(max_length=90, blank=True)
@@ -43,6 +46,7 @@ class ITEM(models.Model):
     def __str__(self):
         return f"{self.name_short}"
 
+# created by customer when quote is created
 class ADDED_ITEM(models.Model):
     item = models.ForeignKey(ITEM, related_name="on_line_items", on_delete=models.CASCADE)
     qty = models.IntegerField()
@@ -56,6 +60,7 @@ class ADDED_ITEM(models.Model):
     def __str__(self):
         return f"Item:{self.item.name_short}, QTY: {self.qty}, package:{self.package}"
 
+# created by customer and app. The quotes that belong to a reciept will be hidden so that the customer can't delete them
 class QUOTE(models.Model):
     name = models.CharField(max_length=95, null=True)
     added_items = models.ManyToManyField(ADDED_ITEM, related_name="quotes", blank=True) #the line items on this quote
@@ -69,13 +74,15 @@ class QUOTE(models.Model):
     def __str__(self):
         return f"{self.id} for: {self.customer.first_name}"
 
+# created by the app
 class ORDER(models.Model):
     service_date = models.DateField()
     service_time = models.TimeField()
+    paid_amount = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+    due_amount = models.DecimalField(max_digits=7, decimal_places=2, null=True)
     
     service_address = models.ForeignKey(SERVICE_ADDRESS, related_name="orders", on_delete=models.CASCADE) #service_addresses can be on multiple orders, such as when a customer has multiple properties
     quote = models.ForeignKey(QUOTE, related_name="orders", on_delete=models.CASCADE) # the quote that was issused to this order (quotes can be on multiple orders with reoccuring service)
-    # receipt = order is paid for and on a reciept
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -83,15 +90,3 @@ class ORDER(models.Model):
     def __str__(self):
         return f"{self.id} for: {self.quote.customer.first_name}"
 
-class RECEIPT(models.Model):
-    paid_date_time = models.DateTimeField()
-    paid_amount = models.DecimalField(max_digits=7, decimal_places=2)
-    due_amount = models.DecimalField(max_digits=7, decimal_places=2)
-    
-    order = models.OneToOneField(ORDER, related_name="receipt", on_delete=models.CASCADE)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.id} for: {self.order.quote.customer.first_name}"
