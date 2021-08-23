@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from login_reg_app.models import CUSTOMER, SERVICE_ADDRESS
 from .models import ITEM_CATEGORY, ITEM_OPTION, ITEM, ADDED_ITEM, QUOTE, ORDER, RECEIPT
 from django.contrib import messages
-from datetime import datetime
+from datetime import date, datetime
 import json
 
 taxrate = 0.10
@@ -38,19 +38,6 @@ def getAllContext(request):
         'tax': format(tax, ".2f"),
         'total': format(total, ".2f")
     }
-    # print all context
-    # for cat in context['Categories']:
-    #     print(f'Categories: ', cat)
-
-    # for items in context['Items']:
-    #     print(f'Items: ', items)
-
-    # for Added in context['Added']:
-    #     for k, v in Added.items():
-    #         print(f'{k}: {v}')
-
-    # for Categories_Added in context['Categories_Added']:
-    #     print(f'Categories_Added: ', Categories_Added)
     return context
 
 def populate_categories(dict_array):
@@ -263,33 +250,36 @@ def address(request):
 # creates QUOTE and ORDER here
 def setaddress(request):
     if request.method == 'POST':
-        try: # createQuote function already asks for customer ID and items_array to be in session. This try catch will tell it what to do if something is missing
-            quoteID = createQuoteFromSession(request, "Quote for order " + datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
-            ORDER.objects.create(
-                service_date = request.session['service_date'],
-                service_time = request.session['service_time'],
-                service_address = SERVICE_ADDRESS.objects.get(id=request.POST['selectedAddressID']),
-                quote = QUOTE.objects.get(id=quoteID)
-            )
-            request.session['currentOrderID'] = ORDER.objects.last().id
-            return redirect('/quote/revieworder')
+        try: 
+            if CUSTOMER.objects.get(id=request.session['customerid']):
+                request.session['currentServAddressID'] = request.POST['selectedAddressID']
+                return redirect('/quote/revieworder')
         except:
             return redirect('/signin/login')
     return redirect('/')
 
 def revieworder(request):
-    try: #check if customer is logged in
+    # try: #check if customer is logged in
         customer = CUSTOMER.objects.get(id=request.session['customerid'])
-        context = {"customer": customer}
+
+        date = datetime.strptime(request.session['service_date'],'%Y-%m-%d') # parse YYYY-MM-DD
+        time = datetime.strptime(request.session['service_time'],'%H:%M') # parse HH:MM (24hr clock)
+        dateFormated = date.strftime("%A, %B %-d %Y") #https://strftime.org
+        timeFormated = time.strftime("%-I:%M %p") 
+        context = getAllContext(request)
+        context["customer"] = customer
+        context["service_date"] = dateFormated
+        context["service_time"]  =timeFormated
+        context["service_address"] = SERVICE_ADDRESS.objects.get(id=request.session['currentServAddressID'])
         return render(request, 'revieworder.html', context)
-    except:
-        return redirect('/signin/login')
+    # except:
+    #     return redirect('/signin/login')
 
 def seeReceipt(request):
     # once a reciept is generated delete this session data
     del request.session['service_date']
     del request.session['service_time']
-    del request.session['currentOrderID']
+    del request.session['currentServAddressID']
 
 def billing(request):
     return redirect('/')

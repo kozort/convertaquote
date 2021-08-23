@@ -10,6 +10,8 @@ urlpatterns = [
     path('address', views.address, name="address"),
     path('setaddress', views.setaddress, name="setaddress"),
     path('revieworder', views.revieworder,  name="revieworder"),
+    path('submitorder', views.submitorder,  name="submitorder"),
+    path('receipt', views.receipt,  name="receipt"),
     path('billing', views.billing, name="billing"),
 
     path('clear', views.clear_quote,  name="clear_quote"),

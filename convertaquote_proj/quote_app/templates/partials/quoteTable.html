@@ -2,14 +2,14 @@
     <h2 id="optionsTableHeader">3. Your Real Time Quote:</h2>
     <table class="table">
         <thead>
-        <tr class="table bg-success text-light">
+        <tr class="table bg-success text-light" id="tableheadrow">
             <th scope="col" >Service</th>
             <th scope="col" class="text-center" >Quantity</th>
             <th scope="col" class="text-center" >Package</th>
             <th></th>
         </tr>
         </thead>
-        <tbody class="bg-success bg-opacity-10">
+        <tbody class="bg-success bg-opacity-10" id="tbody">
         {% for category in Categories_Added %}
             <tr class="table">
                 <td class="py-0" scope="row"><strong>{{ category }}:</strong></td>
@@ -35,7 +35,7 @@
                 {% endif %}
             {% endfor %}
         {% endfor %}
-        <tr class="table">
+        <tr class="table" id="subtotal_row">
             <td scope="row"></td>
             <td></td>
             <td class="text-end py-0">
@@ -46,7 +46,7 @@
                 ${{subtotal}}
             </td>
         </tr>
-        <tr class="table">
+        <tr class="table" id="tax_row">
             <td scope="row"></td>
             <td></td>
             <td class="text-end py-0">
@@ -57,7 +57,7 @@
                 ${{tax}}
             </td>
         </tr>
-        <tr class="table">
+        <tr class="table" id="total_row">
             <td scope="row"></td>
             <td></td>
             <td class="text-end py-0">
