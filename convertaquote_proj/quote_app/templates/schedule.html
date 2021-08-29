@@ -9,59 +9,30 @@
 </head>
 <body class="">
 {% include "partials/navbar.html" %}
-<div class="container-fluid py-2 px-4">
-    <div class="row">
-        <h1 class="flex-wrap mt-3">Schedule Service:</h1>
-        <div class="d-flex flex-wrap">
-            <div class="px-3">
-                <form action="{% url 'quote:scheduling' %}" method="POST" id="scheduleServiceForm">
-                    {% csrf_token %}
-                    <div class="form-group row p-2">
-                        <div class="col-auto">
-                            <label for="serviceDate" class=" col-sm-auto col-form-label">Date:</label>
-                            <div class="col-sm">
-                                <input name="serviceDate" type="date" id="serviceDate" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <label for="serviceTime" class=" col-sm-auto col-form-label">Time:</label>
-                            <div class="col-sm">
-                                <input name="serviceTime" type="time" id="serviceTime" class="form-control">
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="row justify-content-evenly p-2">
-                        <div class=" col">
-                            <a href="/quote" class="btn btn-outline-warning" value="back">Back</a>
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-success" value="schedule">Continue</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div> 
-    </div>
-    <div class="row">
-        <div class="col-md">
-            <!-- quote table -->
-            <div class="row d-flex flex-wrap pb-3">
-            <div class="col-sm d-flex flex-wrap">
-                <div class="row d-flex flex-wrap">
-                    <div class="px-4 col" id="quoteTable">
-                        {% include "partials/quoteTable.html" %}
-                        <script>
-                            $('#optionsTableHeader').replaceWith("<h2 class='py-2'>Your Selected Services:</h2>");
-                            $('#quoteButtons').remove();
-                        </script>
-                    </div>
+<div class="container-fluid">
+    <div class="row d-flex flex-wrap">
+        <div class="col-lg">
+            <h2 class="flex-wrap py-2">Schedule Service:</h2>
+            <div class="row">
+                <div class="col p-0">
+                    <!-- Calendly inline widget begin -->
+                    <div class="calendly-inline-widget w-100" data-url="https://calendly.com/royalcarpetcleaning/schedule-your-service?month=2021-08?hide_landing_page_details=1" style="height:900px"></div>
+                    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+                    <!-- Calendly inline widget end -->
                 </div>
-            </div>
-            </div>
+            </div> 
         </div>
-    </div>
 
+        <div class="col-lg-auto" id="quoteTable">
+            {% include "partials/quoteTable.html" %}
+            <script>
+                $('#optionsTableHeader').replaceWith("<h2 class='py-2'>Your Selected Services:</h2>");
+                $('#quoteButtons').remove();
+            </script>
+        </div>
+
+
+    </div>
 </div>
 <!-- <div class="col-5">
     <label for="start_date" class="col-form-label">Start Date:</label>
