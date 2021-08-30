@@ -220,12 +220,14 @@ def account(request):
 # THIS needs validations!
 def schedule(request):
     try: #check if customer is logged in
-        if CUSTOMER.objects.get(id=request.session['customerid']):
-            try:
-                if request.session['items_array']: 
-                    return render(request, 'schedule.html', getAllContext(request)) 
-            except:
-                return redirect('/')
+        customer = CUSTOMER.objects.get(id=request.session['customerid'])
+        try:
+            if request.session['items_array']: 
+                context = getAllContext(request)
+                context['customer'] = customer
+                return render(request, 'schedule.html', context) 
+        except:
+            return redirect('/')
     except:
         return redirect('/signin/login')
 
@@ -233,8 +235,8 @@ def scheduling(request):
     if request.method == 'POST':
         try: #check if customer is logged in
             if CUSTOMER.objects.get(id=request.session['customerid']):
-                request.session['service_date'] = request.POST['serviceDate']
-                request.session['service_time'] = request.POST['serviceTime']
+                # request.session['service_date'] = request.POST['serviceDate']
+                # request.session['service_time'] = request.POST['serviceTime']
                 return redirect('/quote/address')
         except:
             return redirect('/signin/login')

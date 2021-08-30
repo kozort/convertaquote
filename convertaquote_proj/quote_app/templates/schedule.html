@@ -12,11 +12,12 @@
 <div class="container-fluid">
     <div class="row d-flex flex-wrap">
         <div class="col-lg">
-            <h2 class="flex-wrap py-2">Schedule Service:</h2>
+            <h2 class="flex-wrap py-2">Schedule Service:{{ customer.addresses.all.0.address }}</h2>
             <div class="row">
                 <div class="col p-0">
                     <!-- Calendly inline widget begin -->
-                    <div class="calendly-inline-widget w-100" data-url="https://calendly.com/royalcarpetcleaning/schedule-your-service?month=2021-08?hide_landing_page_details=1" style="height:900px"></div>
+                    <div class="calendly-inline-widget w-100" 
+                    data-url="https://calendly.com/royalcarpetcleaning/schedule-your-service?name={{ customer.first_name }}%20{{ customer.last_name }}&email={{ customer.email }}&location={{ customer.addresses.all.0.address }},%20{{ customer.addresses.all.0.city }}%20{{ customer.addresses.all.0.state }},%20{{ customer.addresses.all.0.zipcode }}" style="height:900px"></div>
                     <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
                     <!-- Calendly inline widget end -->
                 </div>
