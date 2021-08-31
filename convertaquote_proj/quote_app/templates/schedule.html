@@ -3,7 +3,6 @@
     {% include "partials/header.html" %}
 
     {% load static %}
-    <script src="{% static 'pickItem.js' %}"></script>
 
     <title>{% include "partials/Company_name.html" %}</title>
 </head>
@@ -12,13 +11,26 @@
 <div class="container-fluid">
     <div class="row d-flex flex-wrap">
         <div class="col-lg">
-            <h2 class="flex-wrap py-2">Schedule Service:{{ customer.addresses.all.0.address }}</h2>
+            <h2 class="flex-wrap py-2">Schedule Service:</h2>
             <div class="row">
                 <div class="col p-0">
                     <!-- Calendly inline widget begin -->
-                    <div class="calendly-inline-widget w-100" 
-                    data-url="https://calendly.com/royalcarpetcleaning/schedule-your-service?name={{ customer.first_name }}%20{{ customer.last_name }}&email={{ customer.email }}&location={{ customer.addresses.all.0.address }},%20{{ customer.addresses.all.0.city }}%20{{ customer.addresses.all.0.state }},%20{{ customer.addresses.all.0.zipcode }}" style="height:900px"></div>
-                    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+                    <div id="calendly_cal" class="calendly-inline-widget w-100" data-auto-load="false" style="height:900px">
+                        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
+                        <script>
+                            Calendly.initInlineWidget({
+                                url: 'https://calendly.com/royalcarpetcleaning/schedule-your-service?hide_landing_page_details=1?hide_event_type_details=1',
+                                prefill: {
+                                    name: '{{ customer.first_name }} {{ customer.last_name }}',
+                                    email: '{{ customer.email }}',
+                                    location: '{{ customer.addresses.all.0.address }}, {{ customer.addresses.all.0.city }}, {{ customer.addresses.all.0.state }}, {{ customer.addresses.all.0.zipcode }}'
+                                },
+                                utm: {},
+                                event: "calendly.date_and_time_selected",
+                                payload: {}
+                            });
+                        </script>
+                    </div>
                     <!-- Calendly inline widget end -->
                 </div>
             </div> 
@@ -27,8 +39,24 @@
         <div class="col-lg-auto" id="quoteTable">
             {% include "partials/quoteTable.html" %}
             <script>
-                $('#optionsTableHeader').replaceWith("<h2 class='py-2'>Your Selected Services:</h2>");
-                $('#quoteButtons').remove();
+                $(document).ready(function()
+                {
+                    function isCalendlyEvent(e) {
+                    return e.data.event &&
+                            e.data.event.indexOf('calendly') === 0;
+                    };
+                    
+                    window.addEventListener(
+                    'message',
+                    function(e) {
+                        if (isCalendlyEvent(e)) {
+                        console.log(e);
+                        }
+                    }
+                    );
+                    $('#optionsTableHeader').replaceWith("<h2 class='py-2'>Your Selected Services:</h2>");
+                    $('#quoteButtons').remove();
+                })
             </script>
         </div>
 
