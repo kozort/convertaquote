@@ -84,10 +84,19 @@
       
 
         <div class="col-auto">
-          <form action="{% url 'quote:schedule' %}" method="GET">
-
-            <button type="submit" class="btn btn-success">Schedule Now</button> 
-          </form>
+          <!-- <form action="{% url 'quote:schedule' %}" method="GET"></form> -->
+            <!-- Calendly inline widget begin -->
+            <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+            <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+            <!-- Calendly inline widget end -->
+            <a href="" class="btn btn-success" 
+            onclick="Calendly.initPopupWidget({
+                url: 'https://calendly.com/royalcarpetclean/60'
+                });
+                return false;">
+                Schedule Now
+            </a> 
+          
         </div>
       </div>
 {% endif %}
