@@ -14,7 +14,16 @@ def index(request):
 def quote_page(request):
     try:
         if request.session['items_array']: 
-            return render(request, 'new_quote.html', getAllContext(request)) 
+            context = getAllContext(request)
+            print('items array exists: entering cust try')
+            try: #check if customer is logged in
+                print('inside second try')
+                customer = CUSTOMER.objects.get(id=request.session['customerid'])
+                print('customer is: ',customer)
+                context["customer"] = customer
+            except:
+                pass
+            return render(request, 'new_quote.html', context) 
     except:
         pass
     context = {
@@ -30,6 +39,7 @@ def getAllContext(request):
         subtotal += float(dict['runningPrice'])
     tax = subtotal * taxrate
     total = subtotal + tax
+    stillDue = total - 100
     context = {
         "Categories": ITEM_CATEGORY.objects.all(),
         "Items": ITEM.objects.all(),
@@ -37,7 +47,8 @@ def getAllContext(request):
         'Categories_Added': populate_categories(added_items_array),
         'subtotal': format(subtotal, ".2f"),
         'tax': format(tax, ".2f"),
-        'total': format(total, ".2f")
+        'total': format(total, ".2f"),
+        'stillDue': format(stillDue, ".2f")
     }
     return context
 
@@ -140,9 +151,6 @@ def save(request):
             customer = CUSTOMER.objects.get(id=request.session['customerid'])
             context = {
                 "Customer": customer,
-                # # myWISHES = only include those customer created AND not granted
-                # "myWISHES": WISH.objects.filter(created_by = customer).exclude(granted = True),
-                # "grantedWISHES": WISH.objects.filter(granted = True)
                 }
             return render(request, 'savequote.html', context)
         except:
