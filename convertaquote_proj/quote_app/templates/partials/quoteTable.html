@@ -91,13 +91,13 @@
             <!-- Calendly inline widget end -->
             <a href="" class="btn btn-success" 
             onclick="Calendly.initPopupWidget({
-                url: 'https://calendly.com/royalcarpetclean/60{% if customer %}?location={{ customer.addresses.all.0.address }},%20{{ customer.addresses.all.0.city }}%20{{ customer.addresses.all.0.state }},%20{{ customer.addresses.all.0.zipcode }}{% endif %}',
+                url: 'https://calendly.com/royalcarpetclean/120?hide_event_type_details=1&hide_gdpr_banner=1{% if customer %}?location={{ customer.addresses.all.0.address }},%20{{ customer.addresses.all.0.city }}%20{{ customer.addresses.all.0.state }},%20{{ customer.addresses.all.0.zipcode }}{% endif %}',
                 prefill: {
                         name: '{{ customer.first_name }} {{ customer.last_name }}',
                         email: '{{ customer.email }}',
                         location: '{{ customer.addresses.all.0.address }}, {{ customer.addresses.all.0.city }}, {{ customer.addresses.all.0.state }}, {{ customer.addresses.all.0.zipcode }}',
                         customAnswers: {
-                            a1: '{% for category in Categories_Added %}{{ category }}\n{% for item in Added %}{% if item.category == category %}{{ item.name_Long }}(QTY: {{item.qty}}) (Package: {{item.package}}) ${{item.runningPrice}}\n{% endif %}{% endfor %}{% endfor %}\nSubtotal: ${{subtotal}}\nTax: ${{tax}}\nDeposit: -$100.00\n Due at time of service:{{stillDue}}',
+                            a1: '{% for category in Categories_Added %}{{ category }}\n{% for item in Added %}{% if item.category == category %}{{ item.name_Long }}(QTY: {{item.qty}}) (Package: {{item.package}}) ${{item.runningPrice}}\n{% endif %}{% endfor %}{% endfor %}\nSubtotal: ${{subtotal}}\nTax: ${{tax}}\nDeposit: -$100.00\nDue at time of service: ${{stillDue}}',
                         }
                     },
                     utm: {},
